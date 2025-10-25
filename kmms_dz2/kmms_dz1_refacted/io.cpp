@@ -1,6 +1,6 @@
 #include "io.hpp"
 
-void io::print(const std::string text, int *array, const int array_size) {
+void yenni::print(const char *text, int *array, const int array_size) {
     std::cout << text << std::endl;
     for(int i = 0; i < array_size; i++) {
         std::cout << *(array+i) << " ";
@@ -8,7 +8,7 @@ void io::print(const std::string text, int *array, const int array_size) {
     std::cout << std::endl;
 }
 
-void io::input(const std::string text, int &n) {
+void yenni::input(const char *text, int &n) {
     std::cout << text << std::endl;
     std::cin >> n;
 }

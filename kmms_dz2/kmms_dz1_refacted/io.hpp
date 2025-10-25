@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-namespace io {
-    void print(const std::string text, int *array, const int array_size);
-    void input(const std::string text, int &n);
+namespace yenni {
+    void print(const char *text, int *array, const int array_size);
+    void input(const char *text, int &n);
 }
 #endif
