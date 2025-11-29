@@ -9,7 +9,8 @@ namespace yenni {
         const MenuPart *parent;
 
         const MenuPart *const *children;
-        const int children_count;        
+        const int children_count;
+        
     };
 }
 
