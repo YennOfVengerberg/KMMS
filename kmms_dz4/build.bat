@@ -1,7 +1,7 @@
 set BUILD_TYPE=Ninja
 set BUILD_SUFFIX=ninja
 
-chcp 1251
+chcp 65001
 
 set BUILD_FOLDER=build_%BUILD_SUFFIX%
 set SOURCE_FOLDER=projects
@@ -14,5 +14,6 @@ cmake -G %BUILD_TYPE% ..\%SOURCE_FOLDER%
 cmake --build .
 
 copy ..\%SOURCE_FOLDER%\test\run.bat .\test
+copy ..\%SOURCE_FOLDER%\menu\run_menu.bat .\menu
 
 pause
