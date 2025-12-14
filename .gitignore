@@ -1,4 +1,6 @@
 .vscode/
+.lib/
+build_*/
 
 *.exe
 *.ii
