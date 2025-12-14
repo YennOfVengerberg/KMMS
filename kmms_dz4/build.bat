@@ -15,5 +15,6 @@ cmake --build .
 
 copy ..\%SOURCE_FOLDER%\test\run.bat .\test
 copy ..\%SOURCE_FOLDER%\menu\run_menu.bat .\menu
+copy ..\%SOURCE_FOLDER%\sort\sort.bat .\sort
 
 pause
