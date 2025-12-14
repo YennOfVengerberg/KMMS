@@ -2,6 +2,6 @@
 chcp 65001 > log
 del log
 
-sort.exe
+merge_sort.exe
 
 pause
