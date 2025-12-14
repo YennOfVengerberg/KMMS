@@ -1,0 +1,2 @@
+D:/vs/spbu/KMMS/build/CMakeFiles/edit_cache.dir
+D:/vs/spbu/KMMS/build/CMakeFiles/rebuild_cache.dir
