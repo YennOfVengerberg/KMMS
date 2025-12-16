@@ -1,11 +1,13 @@
-target_sources(merge_sort
+target_sources(merge_sort_lib
     PRIVATE 
-        io.cpp
+        
+    PUBLIC
         io.hpp
-        sort.cpp
         sort.hpp
+        io.cpp
+        sort.cpp
 )
 
-target_include_directories(merge_sort PRIVATE
+target_include_directories(merge_sort_lib PUBLIC
     "${PROJECT_SOURCE_DIR}/src"
 )

@@ -1,5 +1,6 @@
-project(merge_sort)
+project(test_merge)
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_library(merge_sort_lib)
 
 add_subdirectory(src)
+add_subdirectory(test)
