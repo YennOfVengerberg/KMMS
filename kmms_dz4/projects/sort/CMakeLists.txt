@@ -1,6 +1,7 @@
 project(test_merge)
 
-add_library(merge_sort_lib)
+set(library merge_sort_lib5)
+add_library(${library})
 
 add_subdirectory(src)
 add_subdirectory(test)
