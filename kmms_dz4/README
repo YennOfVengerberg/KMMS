@@ -1,1 +1,1 @@
-добавить библеотеку googletest  git clone https://github.com/google/googletest. В googletest/CMakeLists.txt из конца файла убрать условную конструкцию, оставить только add_subdirectory( googletest ), иначе не работает 
+добавить библиотеку googletest  git clone https://github.com/google/googletest. В googletest/CMakeLists.txt из конца файла убрать условную конструкцию, оставить только add_subdirectory( googletest ), иначе не работает 
