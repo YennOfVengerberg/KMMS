@@ -88,7 +88,7 @@ int LongNumber::get_length(const char* const str) const noexcept {
 // ----------------------------------------------------------
 // FRIENDLY
 // ----------------------------------------------------------
-namespace biv {
+namespace yenni {
 	std::ostream& operator << (std::ostream &os, const LongNumber& x) {
 		// TODO
 	}
