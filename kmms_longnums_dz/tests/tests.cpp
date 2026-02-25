@@ -90,7 +90,50 @@ TEST(Comparison, Greater_Less) {
 }
 
 TEST(Arithmetics, Plus) {
+    LongNumber num1("52");
+    LongNumber num2("25");
+    LongNumber num3("-52");
+    ASSERT_EQ((num1 + num2), "77");
+    ASSERT_EQ(num2 + num3, "-27");
+    ASSERT_EQ(num1 + num3, "0");
+}
 
+TEST(Arithmetics, Minus) {
+    LongNumber num1("52");
+    LongNumber num2("25");
+    LongNumber num3("-52");
+    ASSERT_EQ((num1 - num2), "27");
+    ASSERT_EQ(num2 - num3, "77");
+    ASSERT_EQ(num1 - num3, "104");
+    ASSERT_EQ(num2 - num1, "-27");
+}
+
+TEST(Arithmetics, Multiplication) {
+    LongNumber num1("52");
+    LongNumber num2("25");
+    LongNumber num3("-52");
+    ASSERT_EQ((num1 * num2), "1300");
+    ASSERT_EQ(num2 * num3, "-1300");
+    ASSERT_EQ(num1 * num3, "-2704");
+    ASSERT_EQ(num3 * num3, "2704");
+}
+
+TEST(Arithmetics, Division) {
+    LongNumber num1("50");
+    LongNumber num2("25");
+    LongNumber num3("-50");
+    ASSERT_EQ((num1 / num2), "2");
+    ASSERT_EQ(num2 / num3, "0");
+    ASSERT_EQ(num1 / num3, "-1");
+}
+
+TEST(Arithmetics, RemainderDivision) {
+    LongNumber num1("50");
+    LongNumber num2("25");
+    LongNumber num3("-100");
+    ASSERT_EQ((num1 % num2), "0");
+    ASSERT_EQ(num2 % num3, "-25");
+    ASSERT_EQ(num1 % num3, "-5");
 }
 
 int main(int argc, char **argv) {
