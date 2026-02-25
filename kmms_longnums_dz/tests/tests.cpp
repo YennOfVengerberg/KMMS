@@ -88,3 +88,12 @@ TEST(Comparison, Greater_Less) {
     ASSERT_LT(num2, num3);
     ASSERT_GT(num1, num3);
 }
+
+TEST(Arithmetics, Plus) {
+
+}
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
