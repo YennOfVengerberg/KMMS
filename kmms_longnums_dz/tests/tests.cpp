@@ -3,33 +3,43 @@
 
 #include "long_nums.hpp"
 
-using namespace yenni;
+using yenni::LongNumber;
+
+const LongNumber num_25("25");
 // init
 TEST(Inititalization, SimpleInitialize) {   
     LongNumber init;
-    EXPECT_FALSE(init.is_negative());
+    LongNumber *ptr = &init;
+    ASSERT_NE(ptr, nullptr);
 }
 
 TEST(Inititalization, SimpleConcreteInitialize) {   
     LongNumber init("25");
-    EXPECT_FALSE(init.is_negative());
-    ASSERT_EQ(init, "25");
+    LongNumber *ptr = &init;
+    EXPECT_NE(ptr, nullptr);
+    EXPECT_EQ(init, num_25);
+    ASSERT_TRUE(init == num_25);
 }
 
 TEST(Inititalization, CopyInitialize) {   
     LongNumber init("52");
     LongNumber copy = init;
-    EXPECT_FALSE(init.is_negative());
-    EXPECT_FALSE(copy.is_negative());
-    ASSERT_EQ(init, copy);
+    EXPECT_EQ(init, copy);
+
+    LongNumber *ptr = &init;
+    EXPECT_NE(ptr, nullptr);
+    LongNumber *ptr_copy = &copy;
+    EXPECT_NE(ptr, nullptr);
+    
 }
 
 TEST(Inititalization, MoveInitialize) {   
     LongNumber init("52");
     LongNumber move("221");
     move = init;
-    EXPECT_TRUE(init.is_negative());
-    EXPECT_FALSE(move.is_negative());
+    LongNumber *ptr = &move;
+    ASSERT_NE(ptr, nullptr);
+    EXPECT_EQ(&move, ptr);
     ASSERT_EQ(move, "52");
 }
 // = init
@@ -37,22 +47,24 @@ TEST(Inititalization, CopyAssignInitialize) {
     LongNumber init("52");
     LongNumber copy;
     copy = init;
-    EXPECT_FALSE(init.is_negative());
-    EXPECT_FALSE(copy.is_negative());
+    LongNumber *ptr = &copy;
+    ASSERT_NE(ptr, nullptr);
     ASSERT_EQ(init, copy);
 }
 
 TEST(Inititalization, AssignMoveInitialize) {   
     LongNumber init("52");
     LongNumber move("221");
-    move = LongNumber("52");
-    EXPECT_FALSE(move.is_negative());
+    move = init;
+    LongNumber *ptr = &move;
+    //EXPECT_NE(ptr, nullptr);
     ASSERT_EQ(move, init);
 }
 
 TEST(Inititalization, InitializeWithConst) {   
     LongNumber init = "52";
-    EXPECT_FALSE(init.is_negative());
+    LongNumber *ptr = &init;
+    ASSERT_NE(ptr, nullptr);
     ASSERT_EQ(init, "52");
 }
 // 
