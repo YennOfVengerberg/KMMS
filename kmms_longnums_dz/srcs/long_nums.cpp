@@ -8,7 +8,7 @@ using yenni::LongNumber;
 LongNumber::LongNumber() { // корректный ввод по условию
 	numbers = nullptr;
 	length = 0;
-	sign = 1;
+	sign = 0;
 }
 /*
 LongNumber::LongNumber(int inp_length, bool inp_sign) {
@@ -126,12 +126,84 @@ bool LongNumber::operator < (const LongNumber& x) const {
 	return !(*this > x);
 }
 
-LongNumber LongNumber::operator + (const LongNumber& x) const {
-	// TODO
+LongNumber LongNumber::operator + (const LongNumber& x) { //6718 + 381
+	LongNumber bigger;
+	LongNumber less;
+	LongNumber result;
+	if(length >= x.length) {
+		bigger = *this;
+		less = x;
+	}
+	else if(length <= x.length) {
+		bigger = x;
+		less = *this;
+	}
+
+	int temp_size = bigger.length + 2;
+	int *res_nums = new int[temp_size];
+
+	for(int i = bigger.length-1; i >= 0; i--) {
+		if(bigger.numbers[i] + less.numbers[i] < 10) 
+			res_nums[i] += bigger.numbers[i] + less.numbers[i];
+		else if(bigger.numbers[i] + less.numbers[i] >= 10) {
+			res_nums[i] += (bigger.numbers[i] + less.numbers[i]) % 10;
+			bigger.numbers[i-1] += 1;
+		} 
+	}
+
+	int head_zeros = 0;
+	for(int i = 0; i < temp_size; i++) {
+		if(res_nums[i] == 0 && res_nums[i+1] == 0)
+			head_zeros++;
+		else if(res_nums[i] == 0 && res_nums[i+1] != 0)
+			head_zeros++;
+			break;
+	}
+
+	result.numbers = res_nums + head_zeros;
+	//res_nums = nullptr;
+
+	return result;
 }
 
-LongNumber LongNumber::operator - (const LongNumber& x) const {
-	// TODO
+LongNumber LongNumber::operator - (const LongNumber& x) { //6718 + 981
+	LongNumber bigger;
+	LongNumber less;
+	LongNumber result;
+	if(length >= x.length) {
+		bigger = *this;
+		less = x;
+	}
+	else if(length <= x.length) {
+		bigger = x;
+		less = *this;
+	}
+
+	int temp_size = bigger.length + 2;
+	int *res_nums = new int[temp_size]{};
+
+	for(int i = bigger.length-1; i >= 0; i--) {
+		if(bigger.numbers[i] - less.numbers[i] >= 0) 
+			res_nums[i] += bigger.numbers[i] - less.numbers[i];
+		else if(bigger.numbers[i] - less.numbers[i] < 0) {
+			bigger.numbers[i-1] -= 1;
+			bigger.numbers[i] += 10;
+			res_nums[i] += bigger.numbers[i] - less.numbers[i];
+		} 
+	}
+
+	int head_zeros = 0;
+	for(int i = 0; i < temp_size; i++) {
+		if(res_nums[i] == 0 && res_nums[i+1] == 0)
+			head_zeros++;
+		else 
+			break;
+	}
+
+	result.numbers = res_nums + head_zeros;
+	res_nums = nullptr;
+
+	return result;
 }
 
 LongNumber LongNumber::operator * (const LongNumber& x) const {
