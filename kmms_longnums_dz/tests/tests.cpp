@@ -4,8 +4,6 @@
 #include "long_nums.hpp"
 
 using yenni::LongNumber;
-
-const LongNumber num_25("25");
 // init
 TEST(Inititalization, SimpleInitialize) {   
     LongNumber init;
@@ -17,8 +15,8 @@ TEST(Inititalization, SimpleConcreteInitialize) {
     LongNumber init("25");
     LongNumber *ptr = &init;
     EXPECT_NE(ptr, nullptr);
-    EXPECT_EQ(init, num_25);
-    ASSERT_TRUE(init == num_25);
+    EXPECT_EQ(init, LongNumber("25"));
+    ASSERT_TRUE(init == LongNumber("25"));
 }
 
 TEST(Inititalization, CopyInitialize) {   

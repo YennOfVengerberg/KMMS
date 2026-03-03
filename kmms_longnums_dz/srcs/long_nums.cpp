@@ -126,47 +126,47 @@ bool LongNumber::operator < (const LongNumber& x) const {
 	return !(*this > x);
 }
 
-LongNumber LongNumber::operator + (const LongNumber& x) { //6718 + 381
+LongNumber LongNumber::operator + (const LongNumber& x) const { //6718 + 381
 	LongNumber bigger;
 	LongNumber less;
 	LongNumber result;
-	if(length >= x.length) {
-		bigger = *this;
-		less = x;
-	}
-	else if(length <= x.length) {
-		bigger = x;
-		less = *this;
-	}
+    if(length >= x.length) {
+        bigger = *this;
+        less = x;
+    }
+    else if(length <= x.length) {
+        bigger = x;
+        less = *this;
+    }
 
-	int temp_size = bigger.length + 2;
-	int *res_nums = new int[temp_size];
+    int temp_size = bigger.length + 1;
 
-	for(int i = bigger.length-1; i >= 0; i--) {
-		if(bigger.numbers[i] + less.numbers[i] < 10) 
-			res_nums[i] += bigger.numbers[i] + less.numbers[i];
-		else if(bigger.numbers[i] + less.numbers[i] >= 10) {
-			res_nums[i] += (bigger.numbers[i] + less.numbers[i]) % 10;
-			bigger.numbers[i-1] += 1;
-		} 
-	}
+    int *res_nums = new int[temp_size]{};
 
-	int head_zeros = 0;
-	for(int i = 0; i < temp_size; i++) {
-		if(res_nums[i] == 0 && res_nums[i+1] == 0)
-			head_zeros++;
-		else if(res_nums[i] == 0 && res_nums[i+1] != 0)
-			head_zeros++;
-			break;
-	}
+    for(int i = bigger.length-1; i >= 0; i--) {
+        if(bigger.numbers[i] + less.numbers[i] < 10) 
+            res_nums[i+1] += bigger.numbers[i] + less.numbers[i];
+        else if(bigger.numbers[i] + less.numbers[i] >= 10) {
+            res_nums[i+1] += (bigger.numbers[i] + less.numbers[i]) % 10;
+            bigger.numbers[i-1] += 1;
+        } 
+    }
+    if(res_nums[0] == 0) {
+        result.numbers = res_nums + 1;
+        result.length = bigger.length; 
+    } 
+    else if(res_nums[0] != 0) {
+        result.numbers = res_nums;
+        result.length = bigger.length + 1;
+    }
+    res_nums = nullptr; // mem leakage
+    bigger.numbers = nullptr;
+    less.numbers = nullptr;
 
-	result.numbers = res_nums + head_zeros;
-	//res_nums = nullptr;
-
-	return result;
+    return result;
 }
 
-LongNumber LongNumber::operator - (const LongNumber& x) { //6718 + 981
+LongNumber LongNumber::operator - (const LongNumber& x) const { //6718 + 981
 	LongNumber bigger;
 	LongNumber less;
 	LongNumber result;
@@ -256,4 +256,9 @@ namespace yenni {
 		return os;
 	}
 	
+}
+
+int main() {
+	LongNumber result = LongNumber("23") + LongNumber("17");
+	std::cout << result;
 }
