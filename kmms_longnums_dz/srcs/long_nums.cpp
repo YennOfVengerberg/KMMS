@@ -86,7 +86,7 @@ bool LongNumber::operator == (const LongNumber& x) const {
 	if(sign != x.sign || length != x.length)
 		return false;
 	else {
-		for(int i = 0; i < length; i++ ) {
+		for(int i = 0; i < length - sign; i++ ) {
 			if (numbers[i] != x.numbers[i])
 				return false;
 		}
@@ -130,13 +130,13 @@ bool LongNumber::operator < (const LongNumber& x) const {
 	return !(*this > x);
 }
 
-LongNumber LongNumber::operator + (const LongNumber& x) { //6718 + 381 20 + (-30)
+LongNumber LongNumber::operator + (const LongNumber& x) { 
 	LongNumber result;
 	if (this->sign == 0 && x.sign == 0) 
 		result = addition(*this, x);
 	else if(this->sign == 0 && x.sign == 1) {
 		result = subtraction(*this, x);
-		if(eq_abs(*this, x))
+		if(eq_abs(*this, x)) // костыль для нулика
 			result.sign = 0;
 	}
 	else if (this->sign == 1 && x.sign == 0) {
@@ -151,15 +151,24 @@ LongNumber LongNumber::operator + (const LongNumber& x) { //6718 + 381 20 + (-30
 }
 
 LongNumber LongNumber::operator - (const LongNumber& x) { //989 - 99 = 890
-	if(this->sign == 0 && x.sign == 0)
-		return subtraction(*this, x);
-	else if(this->sign == 0 && x.sign == 1) {
-		return addition(*this, x);
+	LongNumber result;
+	if (this->sign == 0 && x.sign == 0) {// 100 - 50
+		result = subtraction(*this, x);
+		if(eq_abs(*this, x))
+			result.sign = 0;
 	}
-	else if(this->sign == 1 && x.sign == 0)
-		return subtraction(*this, x);
-	else if(this->sign == 1 && x.sign == 1)
-		return addition(*this, x); 
+	else if(this->sign == 0 && x.sign == 1) { // 100 - -50
+		result = addition(*this, x);
+	}
+	else if (this->sign == 1 && x.sign == 0) { // -50 - 100
+		result = addition(*this, x);
+	}
+	else if(this->sign == 1 && x.sign == 1) {// -50 - -100
+		result = subtraction(*this, x);
+		if(eq_abs(*this, x))
+			result.sign = 0;
+	}
+	return result;
 }
 
 // LongNumber LongNumber::operator * (const LongNumber& x) const {
@@ -184,6 +193,8 @@ bool LongNumber::left_bigger_abs(const LongNumber &a, const LongNumber &b) const
 	for(int i = 0; i < a.length-a.sign; i++) {		// true = a > b, false = a < b
 		if(a.numbers[i] > b.numbers[i])
 			return true;
+		else
+			return false;
 	}
 	return false;
 }
@@ -275,10 +286,9 @@ LongNumber LongNumber::subtraction (const LongNumber &a, const LongNumber &b ) {
 
 	int temp_size = bigger.length - bigger.sign;
 	int *res_nums = new int[temp_size]{};
-	//add_head_zeros(bigger, temp_size);
 	add_head_zeros(less, temp_size);
 
-	for(int i = temp_size-1; i >= 0; i--) { // выпадение старшего разряда приводит к нолику в начале
+	for(int i = temp_size-1; i >= 0; i--) { 
 		if(bigger.numbers[i] - less.numbers[i] >= 0) {
 			res_nums[i] += bigger.numbers[i] - less.numbers[i];
 		}
@@ -289,7 +299,7 @@ LongNumber LongNumber::subtraction (const LongNumber &a, const LongNumber &b ) {
 		} 
 	}
 	result.numbers = res_nums;
-    result.length = bigger.length - bigger.sign;
+    result.length = bigger.length;
 	result.sign = bigger.sign;
 
 	res_nums = nullptr; 
@@ -327,18 +337,20 @@ void LongNumber::add_head_zeros(LongNumber &x, int size) {
 }
 
 void LongNumber::remove_head_zeros(LongNumber &x) {
-	int head_zeros = 0; // 040
+	int head_zeros = 0; 
 	int to_zero_counter = x.length;
 	while(x.numbers[head_zeros] == 0 && to_zero_counter != 1) {
 		head_zeros++;
 		to_zero_counter--;
 	}
+	if(head_zeros == 0)
+		return;
 
 	int new_size = x.length - head_zeros;
 	int *new_numbers = new int[new_size];
 
 	for(int i = 0; i < new_size; i++) {
-		new_numbers[i] = x.numbers[i + head_zeros];
+		new_numbers[i] = x.numbers[i + head_zeros-x.sign];
 	}
 	delete[] x.numbers;
 	x.length = new_size;
@@ -351,7 +363,7 @@ void LongNumber::remove_head_zeros(LongNumber &x) {
 namespace yenni {
 	std::ostream& operator << (std::ostream &os, const LongNumber& x) {
 		if(x.sign == 1) os << "-";
-		for(int i = 0; i < x.length; i++) {
+		for(int i = 0; i < x.length - x.sign; i++) {
 			os << x.numbers[i];
 		}
 		return os;
@@ -359,7 +371,8 @@ namespace yenni {
 }
 
 // int main() {
-//  	LongNumber result = LongNumber("52") + LongNumber("-52"); // 23 + -23 = -
-// 	std::cout << result;
-
+//  	LongNumber num1("25");
+// 	LongNumber num2("-52");
+// 	if(num1 + num2 == LongNumber("-27")) std::cout << "TRUE";
+// 	//std::cout << result;
 //  } 
