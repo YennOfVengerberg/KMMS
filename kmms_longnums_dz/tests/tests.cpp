@@ -94,7 +94,7 @@ TEST(Arithmetics, Plus) {
     LongNumber num4("101");
 
     EXPECT_EQ(num1 + num2, LongNumber("77"));
-    EXPECT_TRUE(num2 + num3 == LongNumber("-27")); 
+    EXPECT_EQ(num2 + num3, LongNumber("-27")); 
     EXPECT_EQ(num1 + num3, LongNumber("0"));
     EXPECT_EQ(num2 + num4, LongNumber("126"));
     EXPECT_EQ(LongNumber("99") + LongNumber("1"), LongNumber("100"));
@@ -111,6 +111,7 @@ TEST(Arithmetics, Minus) {
     EXPECT_EQ(num2 - num1, LongNumber("-27"));
     EXPECT_EQ(num3 - num1, LongNumber("-104"));
     EXPECT_EQ(LongNumber("0") - LongNumber("0"), LongNumber("0"));
+    EXPECT_EQ(LongNumber("-52") - LongNumber("-52"), LongNumber("0"));
 }
 
 // TEST(Arithmetics, Multiplication) {

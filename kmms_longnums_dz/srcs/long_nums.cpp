@@ -306,11 +306,15 @@ LongNumber LongNumber::subtraction (const LongNumber &a, const LongNumber &b, ch
 		} 
 	}
 	result.numbers = res_nums;
-    result.length = bigger.length;
-	if(mother_func == '+') 
+    result.length = temp_size;
+	if(mother_func == '+') {
 		result.sign = bigger.sign;
+		result.length += bigger.sign;
+	}
 	else if(mother_func == '-') {
-		if(a > b)
+		if(a == b)
+			result.sign = 0;
+		else if(a > b)
 			result.sign = 0;
 		else if(a < b) {
 			result.sign = 1;
@@ -386,8 +390,8 @@ namespace yenni {
 }
 
 // int main() {
-//  	LongNumber num1("-52");
-// 	LongNumber num2("51");
-// 	std::cout << num1 - num2;
+//  	LongNumber num1("25");
+// 	LongNumber num2("-52");
+// 	std::cout << num1 + num2;
 // 	//std::cout << result;
 //  } 
