@@ -37,8 +37,8 @@ namespace yenni {
 
 			bool left_bigger_abs (const LongNumber &a, const LongNumber &b) const;
 			bool eq_abs (const LongNumber &a, const LongNumber &b) const;
-			LongNumber addition (const LongNumber &a, const LongNumber &b);
-			LongNumber subtraction (const LongNumber &a, const LongNumber &b);
+			LongNumber addition (const LongNumber &a, const LongNumber &b, char &&mother_func);
+			LongNumber subtraction (const LongNumber &a, const LongNumber &b, char &&mother_func);
 			
 			friend std::ostream& operator << (std::ostream &os, const LongNumber& x);
 

@@ -133,19 +133,19 @@ bool LongNumber::operator < (const LongNumber& x) const {
 LongNumber LongNumber::operator + (const LongNumber& x) { 
 	LongNumber result;
 	if (this->sign == 0 && x.sign == 0) 
-		result = addition(*this, x);
+		result = addition(*this, x, '+');
 	else if(this->sign == 0 && x.sign == 1) {
-		result = subtraction(*this, x);
+		result = subtraction(*this, x, '+');
 		if(eq_abs(*this, x)) // костыль для нулика
 			result.sign = 0;
 	}
 	else if (this->sign == 1 && x.sign == 0) {
-		result = subtraction(*this, x);
+		result = subtraction(*this, x, '+');
 		if(eq_abs(*this, x))
 			result.sign = 0;
 	}
 	else if(this->sign == 1 && x.sign == 1)
-		result = addition(*this, x);
+		result = addition(*this, x, '+');
 
 	return result;
 }
@@ -153,18 +153,20 @@ LongNumber LongNumber::operator + (const LongNumber& x) {
 LongNumber LongNumber::operator - (const LongNumber& x) { //989 - 99 = 890
 	LongNumber result;
 	if (this->sign == 0 && x.sign == 0) {// 100 - 50
-		result = subtraction(*this, x);
+		result = subtraction(*this, x, '-');
 		if(eq_abs(*this, x))
 			result.sign = 0;
 	}
 	else if(this->sign == 0 && x.sign == 1) { // 100 - -50
-		result = addition(*this, x);
+		result = addition(*this, x, '-');
 	}
-	else if (this->sign == 1 && x.sign == 0) { // -50 - 100
-		result = addition(*this, x);
+	else if (this->sign == 1 && x.sign == 0) { // -50 - 100 // -52 - 52
+		result = addition(*this, x, '-');
+		result.sign = 1;
+		result.length++;
 	}
 	else if(this->sign == 1 && x.sign == 1) {// -50 - -100
-		result = subtraction(*this, x);
+		result = subtraction(*this, x, '-');
 		if(eq_abs(*this, x))
 			result.sign = 0;
 	}
@@ -212,7 +214,7 @@ bool LongNumber::eq_abs(const LongNumber &a, const LongNumber &b) const {
 	return true;
 }
 
-LongNumber LongNumber::addition(const LongNumber &a, const LongNumber &b) {
+LongNumber LongNumber::addition(const LongNumber &a, const LongNumber &b, char &&mother_func) {
 	LongNumber bigger;
 	LongNumber less;
 	LongNumber result;
@@ -251,7 +253,12 @@ LongNumber LongNumber::addition(const LongNumber &a, const LongNumber &b) {
     }
 	result.numbers = res_nums ;
     result.length = bigger.length + 1 - bigger.sign; 
-	result.sign = bigger.sign;
+	
+	if(mother_func == '+') 
+		result.sign = bigger.sign; // -52 - 52
+	else if(mother_func == '-') {
+		result.sign = less.sign;
+	}
 
     res_nums = nullptr; 
     bigger.numbers = nullptr;
@@ -261,11 +268,11 @@ LongNumber LongNumber::addition(const LongNumber &a, const LongNumber &b) {
     return result;
 }
 
-LongNumber LongNumber::subtraction (const LongNumber &a, const LongNumber &b ) {
+LongNumber LongNumber::subtraction (const LongNumber &a, const LongNumber &b, char &&mother_func ) {
 	LongNumber bigger;
 	LongNumber less;
 	LongNumber result;
-	if(a.length - a.sign > b.length - b.sign) {
+	if(a.length - a.sign > b.length - b.sign) { 
 		bigger = a;
 		less = b;
 	}
@@ -300,8 +307,16 @@ LongNumber LongNumber::subtraction (const LongNumber &a, const LongNumber &b ) {
 	}
 	result.numbers = res_nums;
     result.length = bigger.length;
-	result.sign = bigger.sign;
-
+	if(mother_func == '+') 
+		result.sign = bigger.sign;
+	else if(mother_func == '-') {
+		if(a > b)
+			result.sign = 0;
+		else if(a < b) {
+			result.sign = 1;
+			result.length++;
+		}// 52 - 27 | 27 - 52
+	}
 	res_nums = nullptr; 
     bigger.numbers = nullptr;
     less.numbers = nullptr;
@@ -371,8 +386,8 @@ namespace yenni {
 }
 
 // int main() {
-//  	LongNumber num1("25");
-// 	LongNumber num2("-52");
-// 	if(num1 + num2 == LongNumber("-27")) std::cout << "TRUE";
+//  	LongNumber num1("-52");
+// 	LongNumber num2("51");
+// 	std::cout << num1 - num2;
 // 	//std::cout << result;
 //  } 
