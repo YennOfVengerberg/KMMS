@@ -214,32 +214,72 @@ LongNumber LongNumber::operator * (const LongNumber& x) {
 		interim.numbers[temp_size - digit - 1] += leftover;
 		result = result + interim;
 	}
-	if(this->sign != x.sign)
-			result.sign = 1;
-		else if(this->sign == x.sign)
-			result.sign = 0;
-		result.length = temp_size + result.sign;
 	remove_head_zeros(result);
+	
+	if(result.numbers[0] == 0) {
+		result.sign = 0;
+		result.length = 1;
+	}
+	else if(sign == x.sign) {
+		result.sign = 0;
+	}
+	else if(sign != x.sign) {
+		result.sign = 1;
+		result.length++;
+	}
+	
 	return result;
 }
 
-// LongNumber LongNumber::operator / (const LongNumber& x) const {
-// 	// TODO
-// 	LongNumber result;
-// 	return result;
-// }
+LongNumber LongNumber::operator / (const LongNumber& x) {
+	LongNumber dividend = *this;
+	LongNumber divider = abs_val(x);
+	LongNumber result(length, 0);
 
-// LongNumber LongNumber::operator % (const LongNumber& x) const {
-// 	// TODO
-// 	LongNumber result;
-// 	return result;
-// }
+	LongNumber interim("0");
+	int answer_digit = 0;
+	for(int i = 0; i < dividend.length - dividend.sign; i++) {
+		char digit_shifting[2] = {char(dividend.numbers[i] + '0'), '\0'};
+		interim = interim + LongNumber(digit_shifting);
+		while(interim > divider || interim == divider) {
+			answer_digit++;
+			interim = interim - divider;
+		}
+		result.numbers[i] = answer_digit;
+		answer_digit = 0;
+		interim = interim * LongNumber("10");
+	}
+
+	remove_head_zeros(result);
+	if(result.numbers[0] == 0) {
+		result.sign = 0;
+		result.length = 1;
+	}
+	else if(sign == x.sign) {
+		result.sign = 0;
+	}
+	else if(sign != x.sign) {
+		result.sign = 1;
+		result.length++;
+	}
+	
+	return result;
+}
+
+LongNumber LongNumber::operator % (const LongNumber& x) {
+	LongNumber dividend = *this;
+	LongNumber divider = abs_val(x);
+	LongNumber result = dividend - ((dividend / divider) * divider);
+	if(result.sign == 1) 
+		result = result + divider;
+	return result;
+}
 
 bool LongNumber::left_bigger_abs(const LongNumber &a, const LongNumber &b) const { 
 	for(int i = 0; i < a.length-a.sign; i++) {		// true = a > b, false = a < b
 		if(a.numbers[i] > b.numbers[i])
 			return true;
-		else
+		else if (a.numbers[i] < b.numbers[i])
 			return false;
 	}
 	return false;
@@ -256,6 +296,15 @@ bool LongNumber::eq_abs(const LongNumber &a, const LongNumber &b) const {
 		return false;
 
 	return true;
+}
+
+LongNumber LongNumber::abs_val(const LongNumber &inp) const {
+	LongNumber result = inp;
+	if(inp.sign == 1) {
+		result.sign = 0;
+		result.length--;
+	}
+	return result;
 }
 
 LongNumber LongNumber::addition(const LongNumber &a, const LongNumber &b, char &&mother_func) {
@@ -373,20 +422,6 @@ LongNumber LongNumber::subtraction (const LongNumber &a, const LongNumber &b, ch
 	return result;
 }
 
-LongNumber LongNumber::multiply_one_digit(const LongNumber &inp, int digit) {
-	LongNumber result(inp.length, inp.sign);
-	if(digit == 0) {
-		return result;
-	}
-	int carry = 0;
-	for(int i = inp.length - 1 - inp.sign; i >= 0; i--) {
-		int temp = inp.numbers[i] * digit + carry;
-		result.numbers[i] = temp % 10;
-		carry = temp / 10; 
-	}
-	//if(carry != 0) result[]
-	return result;
-}
 // ----------------------------------------------------------
 // PRIVATE
 // ----------------------------------------------------------
@@ -448,9 +483,10 @@ namespace yenni {
 	}
 }
 
-// int main() {
-//  	LongNumber num1("52");
-// 	LongNumber num2("25");
-// 	std::cout << num1 * num2;
-// 	//std::cout << result;
-//  } 
+int main() {
+ 	LongNumber num1("-25");
+	LongNumber num2("50");
+	//LongNumber test2 = LongNumber::abs_val(test);
+	std::cout << num1 % num2 << std::endl; //<< abs_val(LongNumber("-50"));
+	//std::cout << result;
+ } 

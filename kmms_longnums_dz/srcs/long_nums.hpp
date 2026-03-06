@@ -9,7 +9,6 @@ namespace yenni {
 			int* numbers;
 			int length;
 			int sign;
-		public:
 		
 		public:
 			LongNumber();
@@ -35,12 +34,13 @@ namespace yenni {
 			LongNumber operator / (const LongNumber& x);
 			LongNumber operator % (const LongNumber& x);
 
+			
 			bool left_bigger_abs (const LongNumber &a, const LongNumber &b) const;
 			bool eq_abs (const LongNumber &a, const LongNumber &b) const;
 			LongNumber addition (const LongNumber &a, const LongNumber &b, char &&mother_func);
 			LongNumber subtraction (const LongNumber &a, const LongNumber &b, char &&mother_func);
-			LongNumber multiply_one_digit(const LongNumber &inp, int digit);
-			
+			LongNumber abs_val(const LongNumber &inp) const ;
+
 			friend std::ostream& operator << (std::ostream &os, const LongNumber& x);
 
 		private:

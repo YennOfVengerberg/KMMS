@@ -85,6 +85,7 @@ TEST(Comparison, Greater_Less) {
     EXPECT_GT(num1, num2);
     EXPECT_LT(num2, num3);
     EXPECT_GT(num1, num3);
+    EXPECT_GT(LongNumber("46"), LongNumber("38"));
 }
 
 TEST(Arithmetics, Plus) {
@@ -122,25 +123,30 @@ TEST(Arithmetics, Multiplication) {
     EXPECT_EQ(num2 * num3, LongNumber("-1300"));
     EXPECT_EQ(num1 * num3, LongNumber("-2704"));
     EXPECT_EQ(num3 * num3, LongNumber("2704"));
+    EXPECT_EQ(LongNumber("12") * LongNumber("4"), LongNumber("48"));
+    EXPECT_EQ(LongNumber("123456789") * LongNumber("0"), LongNumber("0"));
 }
 
-// TEST(Arithmetics, Division) {
-//     LongNumber num1("50");
-//     LongNumber num2("25");
-//     LongNumber num3("-50");
-//     EXPECT_EQ((num1 / num2), LongNumber("2"));
-//     EXPECT_EQ(num2 / num3, LongNumber("0"));
-//     EXPECT_EQ(num1 / num3, LongNumber("-1"));
-// }
+TEST(Arithmetics, Division) {
+    LongNumber num1("50");
+    LongNumber num2("25");
+    LongNumber num3("-50");
+    EXPECT_EQ((num1 / num2), LongNumber("2"));
+    EXPECT_EQ(num2 / num3, LongNumber("0"));
+    EXPECT_EQ(num1 / num3, LongNumber("-1"));
+}
 
-// TEST(Arithmetics, RemainderDivision) {
-//     LongNumber num1("50");
-//     LongNumber num2("25");
-//     LongNumber num3("-100");
-//     EXPECT_EQ((num1 % num2), LongNumber("0"));
-//     EXPECT_EQ(num2 % num3, LongNumber("-25"));
-//     EXPECT_EQ(num1 % num3, LongNumber("-5"));
-// }
+TEST(Arithmetics, RemainderDivision) {
+    LongNumber num1("50");
+    LongNumber num2("25");
+    LongNumber num3("-100");
+    EXPECT_EQ((num1 % num2), LongNumber("0"));
+    EXPECT_EQ(num2 % num3, LongNumber("25"));
+    EXPECT_EQ(num1 % num3, LongNumber("50"));
+    EXPECT_EQ(LongNumber("4") % LongNumber("-15"), LongNumber("4"));
+    EXPECT_EQ(LongNumber("-4") % LongNumber("15"), LongNumber("11"));
+    EXPECT_EQ(LongNumber("50") % LongNumber("-25"), LongNumber("0"));
+}
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
