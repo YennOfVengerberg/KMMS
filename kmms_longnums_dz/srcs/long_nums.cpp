@@ -99,7 +99,7 @@ bool LongNumber::operator != (const LongNumber& x) const {
 }
 
 bool LongNumber::operator > (const LongNumber& x) const { // '-' = 1, '+' = '' = 0
-	if (sign < x.sign) // 52 | 25
+	if (sign < x.sign) 
 		return true;
 	else if(sign > x.sign)
 		return false;
@@ -150,22 +150,22 @@ LongNumber LongNumber::operator + (const LongNumber& x) {
 	return result;
 }
 
-LongNumber LongNumber::operator - (const LongNumber& x) { //989 - 99 = 890
+LongNumber LongNumber::operator - (const LongNumber& x) { 
 	LongNumber result;
-	if (this->sign == 0 && x.sign == 0) {// 100 - 50
+	if (this->sign == 0 && x.sign == 0) {
 		result = subtraction(*this, x, '-');
 		if(eq_abs(*this, x))
 			result.sign = 0;
 	}
-	else if(this->sign == 0 && x.sign == 1) { // 100 - -50
+	else if(this->sign == 0 && x.sign == 1) { 
 		result = addition(*this, x, '-');
 	}
-	else if (this->sign == 1 && x.sign == 0) { // -50 - 100 // -52 - 52
+	else if (this->sign == 1 && x.sign == 0) { 
 		result = addition(*this, x, '-');
 		result.sign = 1;
 		result.length++;
 	}
-	else if(this->sign == 1 && x.sign == 1) {// -50 - -100
+	else if(this->sign == 1 && x.sign == 1) {
 		result = subtraction(*this, x, '-');
 		if(eq_abs(*this, x))
 			result.sign = 0;
@@ -201,7 +201,7 @@ LongNumber LongNumber::operator * (const LongNumber& x) {
 	add_head_zeros(less, temp_size);
 	
 	for(int i = temp_size - 1; i >= temp_size - less.length - less.sign; i--) {
-		int digit = temp_size - i - 1;//temp_size - less.length - less.sign;
+		int digit = temp_size - i - 1;
 		int temp_num = 0;
 		int leftover = 0;
 		LongNumber interim(temp_size, 0);
@@ -348,7 +348,7 @@ LongNumber LongNumber::addition(const LongNumber &a, const LongNumber &b, char &
     result.length = bigger.length + 1 - bigger.sign; 
 	
 	if(mother_func == '+') 
-		result.sign = bigger.sign; // -52 - 52
+		result.sign = bigger.sign;
 	else if(mother_func == '-') {
 		result.sign = less.sign;
 	}
@@ -412,7 +412,7 @@ LongNumber LongNumber::subtraction (const LongNumber &a, const LongNumber &b, ch
 		else if(a < b) {
 			result.sign = 1;
 			result.length++;
-		}// 52 - 27 | 27 - 52
+		}
 	}
 	res_nums = nullptr; 
     bigger.numbers = nullptr;
@@ -482,11 +482,3 @@ namespace yenni {
 		return os;
 	}
 }
-
-int main() {
- 	LongNumber num1("-25");
-	LongNumber num2("50");
-	//LongNumber test2 = LongNumber::abs_val(test);
-	std::cout << num1 % num2 << std::endl; //<< abs_val(LongNumber("-50"));
-	//std::cout << result;
- } 
