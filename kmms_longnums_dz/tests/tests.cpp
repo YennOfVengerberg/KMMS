@@ -114,15 +114,15 @@ TEST(Arithmetics, Minus) {
     EXPECT_EQ(LongNumber("-52") - LongNumber("-52"), LongNumber("0"));
 }
 
-// TEST(Arithmetics, Multiplication) {
-//     LongNumber num1("52");
-//     LongNumber num2("25");
-//     LongNumber num3("-52");
-//     EXPECT_EQ((num1 * num2), LongNumber("1300"));
-//     EXPECT_EQ(num2 * num3, LongNumber("-1300"));
-//     EXPECT_EQ(num1 * num3, LongNumber("-2704"));
-//     EXPECT_EQ(num3 * num3, LongNumber("2704"));
-// }
+TEST(Arithmetics, Multiplication) {
+    LongNumber num1("52");
+    LongNumber num2("25");
+    LongNumber num3("-52");
+    EXPECT_EQ((num1 * num2), LongNumber("1300"));
+    EXPECT_EQ(num2 * num3, LongNumber("-1300"));
+    EXPECT_EQ(num1 * num3, LongNumber("-2704"));
+    EXPECT_EQ(num3 * num3, LongNumber("2704"));
+}
 
 // TEST(Arithmetics, Division) {
 //     LongNumber num1("50");

@@ -7,16 +7,16 @@ LongNumber::LongNumber() { // корректный ввод по условию
 	length = 0;
 	sign = 0;
 }
-/*
-LongNumber::LongNumber(int inp_length, bool inp_sign) {
+
+LongNumber::LongNumber(int inp_length, int inp_sign) {
 	length = inp_length;
 	sign = inp_sign;
-	if(!sign) {
-		numbers = new int[length+1]; 
+	if(sign == 1) {
+		numbers = new int[length+1]{}; 
 	}
 	else 
-		numbers = new int[length];
-}*/
+		numbers = new int[length]{};
+}
 
 LongNumber::LongNumber(const char* const str) {
 	length = get_length(str);
@@ -173,11 +173,55 @@ LongNumber LongNumber::operator - (const LongNumber& x) { //989 - 99 = 890
 	return result;
 }
 
-// LongNumber LongNumber::operator * (const LongNumber& x) const {
-// 	// TODO
-// 	LongNumber result;
-// 	return result;
-// }
+LongNumber LongNumber::operator * (const LongNumber& x) {
+	LongNumber bigger;
+	LongNumber less;
+	if(this->length - this->sign > x.length - x.sign) {
+		bigger = *this;
+		less = x;
+	}
+	else if(this->length - this->sign < x.length - x.sign) {
+		bigger = x;
+		less = *this;
+	}
+	else if(this->length - this->sign == x.length - x.sign) {
+		if(left_bigger_abs(*this, x)) {
+			bigger = *this;
+			less = x;
+		}
+		else {
+			bigger = x;
+			less = *this; 
+		}
+	}
+
+	int temp_size = bigger.length - bigger.sign + less.length - less.sign;
+	LongNumber result(temp_size, 0);
+	add_head_zeros(bigger, temp_size);
+	add_head_zeros(less, temp_size);
+	
+	for(int i = temp_size - 1; i >= temp_size - less.length - less.sign; i--) {
+		int digit = temp_size - i - 1;//temp_size - less.length - less.sign;
+		int temp_num = 0;
+		int leftover = 0;
+		LongNumber interim(temp_size, 0);
+		for(int j = temp_size - 1; j >= temp_size - bigger.length - bigger.sign; j--) {
+			temp_num = less.numbers[i] * bigger.numbers[j];
+			interim.numbers[temp_size - digit - 1] += temp_num % 10 + leftover;
+			leftover = temp_num / 10;
+			digit++;									
+		}
+		interim.numbers[temp_size - digit - 1] += leftover;
+		result = result + interim;
+	}
+	if(this->sign != x.sign)
+			result.sign = 1;
+		else if(this->sign == x.sign)
+			result.sign = 0;
+		result.length = temp_size + result.sign;
+	remove_head_zeros(result);
+	return result;
+}
 
 // LongNumber LongNumber::operator / (const LongNumber& x) const {
 // 	// TODO
@@ -328,6 +372,21 @@ LongNumber LongNumber::subtraction (const LongNumber &a, const LongNumber &b, ch
 	remove_head_zeros(result);
 	return result;
 }
+
+LongNumber LongNumber::multiply_one_digit(const LongNumber &inp, int digit) {
+	LongNumber result(inp.length, inp.sign);
+	if(digit == 0) {
+		return result;
+	}
+	int carry = 0;
+	for(int i = inp.length - 1 - inp.sign; i >= 0; i--) {
+		int temp = inp.numbers[i] * digit + carry;
+		result.numbers[i] = temp % 10;
+		carry = temp / 10; 
+	}
+	//if(carry != 0) result[]
+	return result;
+}
 // ----------------------------------------------------------
 // PRIVATE
 // ----------------------------------------------------------
@@ -390,8 +449,8 @@ namespace yenni {
 }
 
 // int main() {
-//  	LongNumber num1("25");
-// 	LongNumber num2("-52");
-// 	std::cout << num1 + num2;
+//  	LongNumber num1("52");
+// 	LongNumber num2("25");
+// 	std::cout << num1 * num2;
 // 	//std::cout << result;
 //  } 
