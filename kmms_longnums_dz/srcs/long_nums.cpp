@@ -20,12 +20,29 @@ LongNumber::LongNumber(int inp_length, int inp_sign) {
 }
 
 LongNumber::LongNumber(int num) {
-	numbers = new int[1]{1};
-	length = 1;
+	int len = 0;
 	sign = 0;
+	if(num == 0) {
+		length = 1;
+		numbers = new int[1]{0};
+		return;
+	}
+
 	if(num < 0) {
-		sign = 1;
-		length++;
+			len++;
+			sign = 1;
+	}
+	int num_copy = num;
+	while(num_copy > 0) {
+		len++;
+		num_copy /= 10;
+	}
+	length = len;
+	numbers = new int[length-sign]{};
+	num_copy = num;
+	for(int i = length - 1; i >= 0; i--) {
+		numbers[i] = num_copy % 10;
+		num_copy /= 10;
 	}
 }
 
@@ -286,8 +303,7 @@ LongNumber LongNumber::operator / (const LongNumber& x) {
 	LongNumber interim("0");
 	int answer_digit = 0;
 	for(int i = 0; i < dividend.length - dividend.sign; i++) {
-		char digit_shifting[2] = {char(dividend.numbers[i] + '0'), '\0'};
-		interim = interim + LongNumber(digit_shifting);
+		interim = interim + dividend.numbers[i];
 		while(interim > divider || interim == divider) {
 			answer_digit++;
 			interim = interim - divider;
@@ -298,9 +314,7 @@ LongNumber LongNumber::operator / (const LongNumber& x) {
 	}
 	
 	remove_head_zeros(result);
-	if(result * x > *this) {
-		result = result + result.sign ;
-	}
+	
 
 	if(result.numbers[0] == 0) {
 		result.sign = 0;
@@ -314,7 +328,12 @@ LongNumber LongNumber::operator / (const LongNumber& x) {
 		result.length++;
 	}
 	
-	
+	if(result * x > *this && result != LongNumber(0)) {
+		if(result.sign == 0)
+			result = result + 1;
+		else if(result.sign == 1) 
+			result = result - 1;
+	}
 
 	return result;
 }
@@ -538,5 +557,6 @@ namespace yenni {
 // int main() {
 // 	LongNumber int1("-100");
 // 	LongNumber int2("6");
-// 	std::cout << LongNumber("-19602") / LongNumber("198") / LongNumber("-1"); 
+// 	//std::cout << LongNumber("-19602") / LongNumber("198"); // LongNumber("-1"); 
+// 	std::cout << LongNumber("-4") / LongNumber("15") << std::endl << LongNumber("-4") % LongNumber("15");
 // }
