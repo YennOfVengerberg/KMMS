@@ -13,6 +13,7 @@ namespace yenni {
 		public:
 			LongNumber();
 			LongNumber(int length, int sign);
+			LongNumber(int num);
 			LongNumber(const char* const str);
 			LongNumber(const LongNumber& x);
 			LongNumber(LongNumber&& x);
@@ -34,16 +35,14 @@ namespace yenni {
 			LongNumber operator / (const LongNumber& x);
 			LongNumber operator % (const LongNumber& x);
 
-			
+			friend std::ostream& operator << (std::ostream &os, const LongNumber& x);
+
+		private:
 			bool left_bigger_abs (const LongNumber &a, const LongNumber &b) const;
 			bool eq_abs (const LongNumber &a, const LongNumber &b) const;
 			LongNumber addition (const LongNumber &a, const LongNumber &b, char &&mother_func);
 			LongNumber subtraction (const LongNumber &a, const LongNumber &b, char &&mother_func);
 			LongNumber abs_val(const LongNumber &inp) const ;
-
-			friend std::ostream& operator << (std::ostream &os, const LongNumber& x);
-
-		private:
 			void add_head_zeros(LongNumber &x, int size);
 			void remove_head_zeros(LongNumber &x);
 			int get_sign(const char* const str) const noexcept;

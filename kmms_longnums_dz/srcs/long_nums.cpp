@@ -12,10 +12,21 @@ LongNumber::LongNumber(int inp_length, int inp_sign) {
 	length = inp_length;
 	sign = inp_sign;
 	if(sign == 1) {
-		numbers = new int[length+1]{}; 
+		numbers = new int[length]{};
+		length++; 
 	}
 	else 
 		numbers = new int[length]{};
+}
+
+LongNumber::LongNumber(int num) {
+	numbers = new int[1]{1};
+	length = 1;
+	sign = 0;
+	if(num < 0) {
+		sign = 1;
+		length++;
+	}
 }
 
 LongNumber::LongNumber(const char* const str) {
@@ -108,7 +119,10 @@ bool LongNumber::operator > (const LongNumber& x) const { // '-' = 1, '+' = '' =
 		if(length > x.length)
 			return true;
 		else if(length == x.length) {
-			return left_bigger_abs(*this, x);
+			if(eq_abs(*this, x))
+				return false;
+			else 
+				return left_bigger_abs(*this, x);
 		}
 		else if(length < x.length)
 			return false;
@@ -118,7 +132,10 @@ bool LongNumber::operator > (const LongNumber& x) const { // '-' = 1, '+' = '' =
 		if(length > x.length)
 			return false;
 		else if(length == x.length) {
-			return left_bigger_abs(*this, x);
+			if(eq_abs(*this, x))
+				return false;
+			else
+				return !left_bigger_abs(*this, x);
 		}
 		else if(length < x.length)
 			return true;
@@ -127,7 +144,37 @@ bool LongNumber::operator > (const LongNumber& x) const { // '-' = 1, '+' = '' =
 }
 
 bool LongNumber::operator < (const LongNumber& x) const {
-	return !(*this > x);
+	if (sign < x.sign) 
+		return false;
+	else if(sign > x.sign)
+		return true;
+
+	if(x.sign == 0 && sign == 0) {
+		if(length > x.length)
+			return false;
+		else if(length == x.length) {
+			if(eq_abs(*this, x))
+				return false;
+			else 
+				return !left_bigger_abs(*this, x);
+		}
+		else if(length < x.length)
+			return true;
+	}
+	else if(x.sign == 1 && sign == 1)
+	{
+		if(length > x.length)
+			return true;
+		else if(length == x.length) {
+			if(eq_abs(*this, x))
+				return false;
+			else
+				return left_bigger_abs(*this, x);
+		}
+		else if(length < x.length)
+			return false;
+	}
+	return true;
 }
 
 LongNumber LongNumber::operator + (const LongNumber& x) { 
@@ -177,21 +224,21 @@ LongNumber LongNumber::operator * (const LongNumber& x) {
 	LongNumber bigger;
 	LongNumber less;
 	if(this->length - this->sign > x.length - x.sign) {
-		bigger = *this;
-		less = x;
+		bigger = abs_val(*this);
+		less = abs_val(x);
 	}
 	else if(this->length - this->sign < x.length - x.sign) {
-		bigger = x;
-		less = *this;
+		bigger = abs_val(x);
+		less = abs_val(*this);
 	}
 	else if(this->length - this->sign == x.length - x.sign) {
 		if(left_bigger_abs(*this, x)) {
-			bigger = *this;
-			less = x;
+			bigger = abs_val(*this);
+			less = abs_val(x);
 		}
 		else {
-			bigger = x;
-			less = *this; 
+			bigger = abs_val(x);
+			less = abs_val(*this); 
 		}
 	}
 
@@ -232,9 +279,9 @@ LongNumber LongNumber::operator * (const LongNumber& x) {
 }
 
 LongNumber LongNumber::operator / (const LongNumber& x) {
-	LongNumber dividend = *this;
+	LongNumber dividend = abs_val(*this);
 	LongNumber divider = abs_val(x);
-	LongNumber result(length, 0);
+	LongNumber result(dividend.length, 0);
 
 	LongNumber interim("0");
 	int answer_digit = 0;
@@ -247,10 +294,14 @@ LongNumber LongNumber::operator / (const LongNumber& x) {
 		}
 		result.numbers[i] = answer_digit;
 		answer_digit = 0;
-		interim = interim * LongNumber("10");
+		interim = interim * "10";
+	}
+	
+	remove_head_zeros(result);
+	if(result * x > *this) {
+		result = result + result.sign ;
 	}
 
-	remove_head_zeros(result);
 	if(result.numbers[0] == 0) {
 		result.sign = 0;
 		result.length = 1;
@@ -263,6 +314,8 @@ LongNumber LongNumber::operator / (const LongNumber& x) {
 		result.length++;
 	}
 	
+	
+
 	return result;
 }
 
@@ -271,10 +324,12 @@ LongNumber LongNumber::operator % (const LongNumber& x) {
 	LongNumber divider = abs_val(x);
 	LongNumber result = dividend - ((dividend / divider) * divider);
 	if(result.sign == 1) 
-		result = result + divider;
+		result = result + divider ;
 	return result;
 }
-
+// ----------------------------------------------------------
+// PRIVATE
+// ----------------------------------------------------------
 bool LongNumber::left_bigger_abs(const LongNumber &a, const LongNumber &b) const { 
 	for(int i = 0; i < a.length-a.sign; i++) {		// true = a > b, false = a < b
 		if(a.numbers[i] > b.numbers[i])
@@ -422,9 +477,6 @@ LongNumber LongNumber::subtraction (const LongNumber &a, const LongNumber &b, ch
 	return result;
 }
 
-// ----------------------------------------------------------
-// PRIVATE
-// ----------------------------------------------------------
 int LongNumber::get_length(const char* const str) const noexcept {
 	int length = 0;
 	while(str[length] != '\0') {
@@ -482,3 +534,9 @@ namespace yenni {
 		return os;
 	}
 }
+
+// int main() {
+// 	LongNumber int1("-100");
+// 	LongNumber int2("6");
+// 	std::cout << LongNumber("-19602") / LongNumber("198") / LongNumber("-1"); 
+// }
