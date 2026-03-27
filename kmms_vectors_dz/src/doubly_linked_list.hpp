@@ -23,14 +23,16 @@ namespace yenni {
 
 		public:
 			DoublyLinkedList() noexcept {};
+			DoublyLinkedList(T arr[]);
 			DoublyLinkedList(const DoublyLinkedList&) = delete;
 			DoublyLinkedList& operator = (const DoublyLinkedList&) = delete;
+			DoublyLinkedList (std::initializer_list<T> init);
 			~DoublyLinkedList();
 			
 			std::size_t get_size() const noexcept;
 			bool has_item(const T& value) const noexcept;
 			void print() const noexcept;
 			void push_back(const T& value);
-			bool remove_first(const T& value) noexcept;
+			bool remove_first_occurance(const T& value) noexcept;
 	};
 }
