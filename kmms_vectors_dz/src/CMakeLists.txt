@@ -1,10 +1,10 @@
 target_sources(${CONTAINERS_LIB} 
 	PRIVATE
 		doubly_linked_list.cpp
-		#vector.cpp
+		vector.cpp
 	PUBLIC
 		doubly_linked_list.hpp
-		#vector.hpp
+		vector.hpp
 )
 
 target_include_directories(${CONTAINERS_LIB} PUBLIC

@@ -6,7 +6,7 @@ namespace yenni {
 	template <typename T> 
 	class Vector {
 		private:
-			static const std::size_t START_CAPACITY;
+			static const std::size_t START_CAPACITY = 4;
 
 			T* arr = nullptr;
 			std::size_t capacity = START_CAPACITY;
@@ -14,7 +14,7 @@ namespace yenni {
 
 		public:
 			Vector();
-			Vector(T arr[]);
+			Vector(T arr[], std::size_t size);
 			// Vector(std::initializer_list<T> arr);
 			Vector(const Vector&) = delete;
 			Vector& operator = (const Vector&) = delete;
@@ -26,5 +26,8 @@ namespace yenni {
 			void print() const noexcept;
 			void push_back(const T& value);
 			bool remove_first_occurance(const T& value);
+
+		private:
+			void realloc_mem(const std::size_t &new_capacity);
 	};
 }
