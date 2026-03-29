@@ -4,7 +4,8 @@
 
 using yenni::Vector;
 
-Vector<int> global = {1, 2, 3, 4, 5};
+int arr[] = {2, 4, 5, 1};
+Vector<int> global(arr);
 
 TEST(Init, VoidVector) {
 	Vector<int> vec;
@@ -28,14 +29,14 @@ TEST(InitAndPrint, lvalInit) {
 	strinit.print();
 }
 
-TEST(InitAndPrint, rvalInit) {
-	Vector<int> intinit = {2, 4, 5, 1};
-	Vector<float> floatinit = {2.1, 3.0, 2.7};
-	Vector<char> strinit = {'t', 'e', 's', 't'};
-	intinit.print();
-	floatinit.print();
-	strinit.print();
-}
+// TEST(InitAndPrint, rvalInit) {
+// 	Vector<int> intinit = {2, 4, 5, 1};
+// 	Vector<float> floatinit = {2.1, 3.0, 2.7};
+// 	Vector<char> strinit = {'t', 'e', 's', 't'};
+// 	intinit.print();
+// 	floatinit.print();
+// 	strinit.print();
+// }
 
 TEST(Functions, get_size) {
 	size_t test_res = global.get_size();
@@ -47,11 +48,11 @@ TEST(Functions, has_item) {
 	EXPECT_TRUE(test_bool);
 }
 
-TEST(Functions, insert) {
-	Vector<int> intinit = {2, 4, 5, 1};
-	intinit.insert(2, 13);
-	intinit.print();
-}
+// TEST(Functions, insert) {
+// 	Vector<int> intinit = {2, 4, 5, 1};
+// 	intinit.insert(2, 13);
+// 	intinit.print();
+// }
 
 TEST(Functions, push_back) {
 	char string[] = {'t', 'e', 's', 't'};

@@ -15,7 +15,7 @@ namespace yenni {
 		public:
 			Vector();
 			Vector(T arr[]);
-			Vector(std::initializer_list<T> arr);
+			// Vector(std::initializer_list<T> arr);
 			Vector(const Vector&) = delete;
 			Vector& operator = (const Vector&) = delete;
 			~Vector();

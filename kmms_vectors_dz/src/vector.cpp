@@ -40,6 +40,6 @@ void Vector<T>::push_back(const T& value) {
 }
 
 template<typename T>
-bool Vector<T>::remove_first(const T& value) {
+bool Vector<T>::remove_first_occurance(const T& value) {
 	// TODO
 }
