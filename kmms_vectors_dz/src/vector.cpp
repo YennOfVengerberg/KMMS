@@ -4,7 +4,6 @@
 
 using yenni::Vector;
 
-
 template<typename T>
 Vector<T>::Vector() {
 	size = 0;
@@ -43,7 +42,7 @@ bool Vector<T>::has_item(const T& value) const noexcept {
 	}
 	return false;
 }
-// {1, 2,  , 3  , 4 } size 4 ind 3
+
 template<typename T>
 bool Vector<T>::insert(const std::size_t position, const T& value) {
 	if(position > size)
@@ -52,8 +51,8 @@ bool Vector<T>::insert(const std::size_t position, const T& value) {
 	if(capacity <= size + 1) 
 		realloc_mem(capacity * 2);
 
-	for(std::size_t iter = size - 1; iter > position; iter--)
-		arr[iter + 1] = arr[iter]; 
+	for(std::size_t shift = size - 1; shift > position; shift--)
+		arr[shift + 1] = arr[shift]; 
 	arr[position] = value;
 	size++;
 	return true;
@@ -75,7 +74,7 @@ void Vector<T>::push_back(const T& value) {
 	arr[size] = value;
 	size++;
 }
-// {1, 2, 3 , 3  , 4 } size 5 ind 3
+
 template<typename T>
 bool Vector<T>::remove_first_occurance(const T& value) {
 	for(std::size_t iter = 0; iter < size; iter++) {

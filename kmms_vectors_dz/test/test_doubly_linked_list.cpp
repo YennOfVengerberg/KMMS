@@ -15,29 +15,6 @@ TEST(Init, VoidList) {
 	EXPECT_NE(ptr, nullptr);
 }
 
-// TEST(InitAndPrint, lvalInit) {
-// 	int arrint[] = {1, 2, 3, 4, 5};
-// 	float arrfloat[] = {2.4, 3.6, 1.2};
-// 	char string[] = {'t', 'e', 's', 't'};
-// 	DoublyLinkedList<int> intinit (arrint, sizeof(arrint)/sizeof(int));
-// 	DoublyLinkedList<float> floatinit (arrfloat, sizeof(arrfloat)/sizeof(float));
-// 	DoublyLinkedList<char> strinit (string, sizeof(string)/sizeof(char));
-// 	intinit.print();
-// 	floatinit.print();
-// 	strinit.print();
-// }
-
-// TEST(InitAndPrint, rvalInit) {
-// 	DoublyLinkedList<int> intinit = {2, 4, 5, 1};
-// 	DoublyLinkedList<float> floatinit = {2.1, 3.0, 2.7};
-// 	DoublyLinkedList<char> strinit = {'t', 'e', 's', 't'};
-// 	intinit.print();
-// 	floatinit.print();
-// 	strinit.print();
-// }
-
-
-
 TEST(Functions, get_size) {
 	size_t test_res = global.get_size();
 	size_t test_res2 = global2.get_size();
