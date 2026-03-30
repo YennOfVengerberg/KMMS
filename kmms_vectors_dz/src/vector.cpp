@@ -92,7 +92,7 @@ bool Vector<T>::remove_first_occurance(const T& value) {
 }
 
 template<typename T>
-void Vector<T>::realloc_mem(const std::size_t &new_capacity) {
+void Vector<T>::realloc_mem(const std::size_t new_capacity) {
 	T *new_arr = new T[new_capacity];
 	for(std::size_t i = 0; i < size; i++)
 		new_arr[i] = arr[i];

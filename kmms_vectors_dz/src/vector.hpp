@@ -28,6 +28,6 @@ namespace yenni {
 			bool remove_first_occurance(const T& value);
 
 		private:
-			void realloc_mem(const std::size_t &new_capacity);
+			void realloc_mem(const std::size_t new_capacity);
 	};
 }
