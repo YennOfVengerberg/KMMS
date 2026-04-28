@@ -12,16 +12,18 @@ typedef struct SObject {
     float height, width;
     float vert_speed;
     BOOL in_air;
+    char c_type;
 } TObject;
 
 char map[map_height][map_width+1];
 TObject memerio;
 TObject *brick = NULL;
 int brick_length;
+int level = 1;
 
 void clear_map() {
     for(int i = 0; i < map_width; i++) 
-        map[0][i] = '.';
+        map[0][i] = ' ';
     for(int j = 1; j < map_height; j++)
         sprintf(map[j], map[0]);
 }
@@ -37,14 +39,16 @@ void set_object_pos(TObject *obj, float x_pos, float y_pos) {
     (*obj).y = y_pos;
 }
 
-void init_object(TObject *obj, float x_pos, float y_pos, float o_width, float o_height) {
+void init_object(TObject *obj, float x_pos, float y_pos, float o_width, float o_height, char obj_type) {
     set_object_pos(obj, x_pos, y_pos);
     (*obj).width = o_width;
     (*obj).height = o_height;
     (*obj).vert_speed = 0;
+    (*obj).c_type = obj_type;
 }
 
 BOOL is_collision(TObject obj1, TObject obj2);
+void create_level(int level);
 
 void vert_move_object(TObject *obj) {
     (*obj).in_air = TRUE;
@@ -56,21 +60,38 @@ void vert_move_object(TObject *obj) {
             (*obj).y -= (*obj).vert_speed;
             (*obj).vert_speed = 0;
             (*obj).in_air = FALSE;
+            if(brick[i].c_type == 'w') {
+                level++;
+                if(level > 2) printf("w w w w w w w wwin win win w w w w w"); 
+                create_level(level);
+                Sleep(1000);
+            }
             break;
         }
     }
 }
 
-void create_level() {
-    init_object(&memerio, 39, 10, 3, 3);
+void create_level(int level) {
+    init_object(&memerio, 39, 10, 3, 3, '@');
 
-    brick_length = 5;
-    brick = (TObject*)realloc(brick, sizeof(*brick) * brick_length);
-    init_object(brick+0, 20, 20, 40, 5);
-    init_object(brick+1, 60, 15, 10, 10);
-    init_object(brick+2, 80, 20, 20, 5);
-    init_object(brick+3, 120, 15, 10, 10);
-    init_object(brick+4, 155, 20, 40, 5);
+    if(level == 1) {
+        brick_length = 6;
+        brick = (TObject*)realloc(brick, sizeof(*brick) * brick_length);
+        init_object(brick+0, 20, 20, 40, 5, '2');
+        init_object(brick+1, 60, 15, 10, 10, '2');
+        init_object(brick+2, 80, 20, 20, 5, '2');
+        init_object(brick+3, 120, 15, 10, 10, '2');
+        init_object(brick+4, 155, 20, 40, 5, '2');
+        init_object(brick+5, 210, 15, 10, 10, 'w');
+    }
+    if(level == 2) {
+        brick_length = 4;
+        brick = (TObject*)realloc(brick, sizeof(*brick) * brick_length);
+        init_object(brick+0, 20, 20, 40, 5, '2');
+        init_object(brick+1, 80, 20, 15, 5, '2');
+        init_object(brick+2, 120, 15, 15, 10, '2');
+        init_object(brick+3, 160, 10, 15, 15, 'w');
+    }
 
 }
 
@@ -87,7 +108,7 @@ void put_object_on_map(TObject obj) {
     for(int i = ix; i < (ix + i_width); i++) 
         for(int j = iy; j < (iy + i_heigth); j++)
             if(is_pos_in_map(i, j))
-                map[j][i] = '@';
+                map[j][i] = obj.c_type;
 }
 
 void set_cursor(int x, int y) {
@@ -118,7 +139,9 @@ BOOL is_collision(TObject obj1, TObject obj2) {
 
 int main() {
     
-    create_level();
+    create_level(level);
+
+    system("color 1F");
 
     do  {
         clear_map();
@@ -127,7 +150,7 @@ int main() {
         if(GetKeyState(VK_LEFT) < 0) horizontal_move_map(1);
         if(GetKeyState(VK_RIGHT) < 0) horizontal_move_map(-1);
 
-        if(memerio.y > map_height) create_level();
+        if(memerio.y > map_height) create_level(level);
 
         vert_move_object(&memerio);
         for(int i = 0; i < brick_length; i++) {
