@@ -57,8 +57,6 @@ void init_object(TObject *obj, float x_pos, float y_pos, float o_width, float o_
     (*obj).horiz_speed = 0.2;
 }
 
-
-
 BOOL is_collision(TObject obj1, TObject obj2);
 void create_level(int level);
 
