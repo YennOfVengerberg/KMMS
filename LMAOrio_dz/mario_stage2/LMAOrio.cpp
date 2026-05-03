@@ -3,18 +3,20 @@
 #define map_width 80
 #define map_height 25
 
-int main() {
-    char map[map_height][map_width+1];
+char map[map_height][map_width+1];
 
-    TObject memerio;
-    TObject *bricks = NULL;
-    TObject *movables = NULL;
-    int movables_number;
-    int bricks_number;
+TObject memerio;
+TObject *bricks = NULL;
+TObject *movables = NULL;
+int movables_number;
+int bricks_number;
     
-    int score;
-    int level = 1;
-    int max_level;
+int score;
+int level = 1;
+int max_level;
+
+int main() {
+    
 
     create_level(level);
 
@@ -32,7 +34,7 @@ int main() {
         player_collision();
 
         for(int i = 0; i < bricks_number; i++) {
-            put_object_on_map(brick[i]);
+            put_object_on_map(bricks[i]);
         }
         for(int i = 0; i < movables_number; i++) {
             vert_move_object(movables + i);
