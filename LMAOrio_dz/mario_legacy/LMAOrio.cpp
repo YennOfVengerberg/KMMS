@@ -4,6 +4,8 @@
 #include <math.h>
 #include <windows.h>
 
+#include <vector>
+
 #define map_width 80
 #define map_height 25
 
