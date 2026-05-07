@@ -9,33 +9,29 @@ extern int bricks_number, movables_number;
 
 void clear_map() {
     for(int i = 0; i < MAP_WIDTH; i++) 
-        map[0][i] = ' ';
-    for(int j = 1; j < MAP_HEIGHT; j++)
-        sprintf(map[j], map[0]);
+        for(int j = 1; j < MAP_HEIGHT; j++)
+            map[j][i] = ' ';
 }
 
 void show_map() {
     map[MAP_HEIGHT - 1][MAP_WIDTH] = '\0';
     for(int j = 0; j < MAP_HEIGHT; j++)
-        printf("%s", map[j]);
+        std::cout << map[j];
 }
 
 void set_object_pos(TObject *obj, float x_pos, float y_pos) {
-    (*obj).x = x_pos;
-    (*obj).y = y_pos;
+    obj->x = x_pos;
+    obj->y = y_pos;
 }
 
 void init_object(TObject *obj, float x_pos, float y_pos, float o_width, float o_height, char obj_type) {
     set_object_pos(obj, x_pos, y_pos);
-    (*obj).width = o_width;
-    (*obj).height = o_height;
-    (*obj).vert_speed = 0;
-    (*obj).c_type = obj_type;
-    (*obj).horiz_speed = 0.2;
+    obj->width = o_width;
+    obj->height = o_height;
+    obj->vert_speed = 0;
+    obj->c_type = obj_type;
+    obj->horiz_speed = 0.2;
 }
-
-BOOL is_collision(TObject obj1, TObject obj2);
-void create_level(int level);
 
 void player_died() {
     system("color 4F");
@@ -45,25 +41,35 @@ void player_died() {
 
 TObject *get_new_brick() {
     bricks_number++;
-    bricks = (TObject*)realloc(bricks, sizeof(*bricks) * bricks_number);
-    return bricks + bricks_number - 1;
+    TObject *temp_arr = new TObject[bricks_number];
+    for(int i = 0; i < bricks_number-1; i++) {
+        temp_arr[i] = bricks[i];
+    }
+    delete[] bricks;
+    bricks = temp_arr;
+    return &bricks[bricks_number-1];
 }
 
 TObject *get_new_movable() {
     movables_number++;
-    movables = (TObject*)realloc(movables, sizeof(*movables) * movables_number);
-    return movables + movables_number - 1;
+    TObject *temp_arr = new TObject[movables_number];
+    for(int i = 0; i < movables_number - 1; i++) {
+        temp_arr[i] = movables[i];
+    }
+    delete[] movables;
+    movables = temp_arr;
+    return &movables[movables_number-1];
 }
 
 void vert_move_object(TObject *obj) {
-    (*obj).in_air = TRUE;
-    (*obj).vert_speed += 0.05;
-    set_object_pos(obj, (*obj).x, (*obj).y + (*obj).vert_speed);
+    obj->in_air = true;
+    obj->vert_speed += 0.05;
+    set_object_pos(obj, obj->x, obj->y + obj->vert_speed);
 
     for(int i = 0; i < bricks_number; i++ ) {    
         if(is_collision(*obj, bricks[i] ) ) {
             if(obj[0].vert_speed > 0)
-                obj[0].in_air = FALSE;
+                obj[0].in_air = false;
 
             if(bricks[i].c_type == '?' && obj[0].vert_speed < 0 && obj == &memerio) {
                 bricks[i].c_type = '-';
@@ -71,8 +77,8 @@ void vert_move_object(TObject *obj) {
                 movables[movables_number - 1].vert_speed = -0.7;
             }
 
-            (*obj).y -= (*obj).vert_speed;
-            (*obj).vert_speed = 0;
+            obj->y -= obj->vert_speed;
+            obj->vert_speed = 0;
 
             if(bricks[i].c_type == 'w') {
                 level++;
@@ -103,10 +109,10 @@ void create_level(int level) {
     system("color 1F");
 
     bricks_number = 0;
-    bricks = (TObject*)realloc(bricks, 0);
+    TObject *bricks = new TObject[0];
 
     movables_number = 0;
-    movables = (TObject*)realloc(movables, 0);
+    TObject *movables = new TObject[0];
 
     init_object(&memerio, 39, 10, 3, 3, '@');
     score = 0;
@@ -286,14 +292,19 @@ void create_level(int level) {
 void delete_movable(int i) {
     movables_number--;
     movables[i] = movables[movables_number];
-    movables = (TObject*)realloc(movables, sizeof(*movables) * movables_number);
+    TObject *temp_arr = new TObject[movables_number];
+    for(int i = 0; i < movables_number; i++) {
+        temp_arr[i] = movables[i];
+    }
+    delete[] movables;
+    movables = temp_arr;
 }
 
 void player_collision() {
     for(int i = 0; i < movables_number; i++) {
         if(is_collision(memerio, movables[i])) {
             if(movables[i].c_type == 'o') {
-                if(memerio.in_air == TRUE && memerio.vert_speed > 0 
+                if(memerio.in_air == true && memerio.vert_speed > 0 
                     && memerio.y + memerio.height < movables[i].y + movables[i].height * 0.5) {
                         delete_movable(i);
                         i--;
@@ -327,22 +338,22 @@ void horizon_move_object(TObject *obj) {
     if(obj[0].c_type == 'o') { 
         TObject temp = *obj;
         vert_move_object(&temp);
-        if(temp.in_air == TRUE) {
+        if(temp.in_air == true) {
             obj[0].x -= obj[0].horiz_speed;
             obj[0].horiz_speed = -obj[0].horiz_speed;
         }
     }
 }
 
-BOOL is_pos_in_map(int x, int y) {
+bool is_pos_in_map(int x, int y) {
     return (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT);
 }
 
 void put_object_on_map(TObject obj) {
-    int ix = int(round(obj.x));
-    int iy = int(round(obj.y));
-    int i_width = int(round(obj.width));
-    int i_height = int(round(obj.height));
+    int ix = static_cast<int>(round(obj.x));
+    int iy = static_cast<int>(round(obj.y));
+    int i_width = static_cast<int>(round(obj.width));
+    int i_height = static_cast<int>(round(obj.height));
 
     for(int i = ix; i < (ix + i_width); i++) 
         for(int j = iy; j < (iy + i_height); j++)
@@ -373,7 +384,7 @@ void horizontal_move_map(float dx) {
         movables[i].x += dx;
 }
 
-BOOL is_collision(TObject obj1, TObject obj2) {
+bool is_collision(TObject obj1, TObject obj2) {
     return (obj1.x + obj1.width > obj2.x && obj1.x < obj2.x + obj2.width && 
             obj1.y + obj1.height > obj2.y && obj1.y < obj2.y + obj2.height); 
 }
