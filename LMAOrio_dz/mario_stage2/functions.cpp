@@ -19,83 +19,6 @@ void show_map() {
         std::cout << map[j];
 }
 
-void set_object_pos(TObject *obj, float x_pos, float y_pos) {
-    obj->x = x_pos;
-    obj->y = y_pos;
-}
-
-void init_object(TObject *obj, float x_pos, float y_pos, float o_width, float o_height, char obj_type) {
-    set_object_pos(obj, x_pos, y_pos);
-    obj->width = o_width;
-    obj->height = o_height;
-    obj->vert_speed = 0;
-    obj->c_type = obj_type;
-    obj->horiz_speed = 0.2;
-}
-
-void player_died() {
-    system("color 4F");
-    Sleep(500);
-    create_level(level);
-}
-
-TObject *get_new_brick() {
-    bricks_number++;
-    TObject *temp_arr = new TObject[bricks_number];
-    for(int i = 0; i < bricks_number-1; i++) {
-        temp_arr[i] = bricks[i];
-    }
-    delete[] bricks;
-    bricks = temp_arr;
-    return &bricks[bricks_number-1];
-}
-
-TObject *get_new_movable() {
-    movables_number++;
-    TObject *temp_arr = new TObject[movables_number];
-    for(int i = 0; i < movables_number - 1; i++) {
-        temp_arr[i] = movables[i];
-    }
-    delete[] movables;
-    movables = temp_arr;
-    return &movables[movables_number-1];
-}
-
-void vert_move_object(TObject *obj) {
-    obj->in_air = true;
-    obj->vert_speed += 0.05;
-    set_object_pos(obj, obj->x, obj->y + obj->vert_speed);
-
-    for(int i = 0; i < bricks_number; i++ ) {    
-        if(is_collision(*obj, bricks[i] ) ) {
-            if(obj[0].vert_speed > 0)
-                obj[0].in_air = false;
-
-            if(bricks[i].c_type == '?' && obj[0].vert_speed < 0 && obj == &memerio) {
-                bricks[i].c_type = '-';
-                init_object(get_new_movable(), bricks[i].x, bricks[i].y-3, 3, 2, '$');
-                movables[movables_number - 1].vert_speed = -0.7;
-            }
-
-            obj->y -= obj->vert_speed;
-            obj->vert_speed = 0;
-
-            if(bricks[i].c_type == 'w') {
-                level++;
-                if(level > max_level) {
-                    printf("w w w w w w w wwin win win w w w w w");
-                    level = 1;
-                } 
-                system("color 2F");
-                Sleep(1000);
-
-                create_level(level);
-            }
-            break;
-        }
-    }
-}
-
 void display_score() {
     char c[30];
     sprintf(c, "SCORE: %d", score);
@@ -103,6 +26,13 @@ void display_score() {
     for(int i = 0; i < len; i++) {
         map[1][i+5] = c[i];
     }
+}
+
+void set_cursor(int x, int y) {
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
 void create_level(int level) {
@@ -289,16 +219,6 @@ void create_level(int level) {
     max_level = 3;
 }
 
-void delete_movable(int i) {
-    movables_number--;
-    movables[i] = movables[movables_number];
-    TObject *temp_arr = new TObject[movables_number];
-    for(int i = 0; i < movables_number; i++) {
-        temp_arr[i] = movables[i];
-    }
-    delete[] movables;
-    movables = temp_arr;
-}
 
 void player_collision() {
     for(int i = 0; i < movables_number; i++) {
@@ -324,6 +244,47 @@ void player_collision() {
     }
 }
 
+void player_died() {
+    system("color 4F");
+    Sleep(500);
+    create_level(level);
+}
+
+void vert_move_object(TObject *obj) {
+    obj->in_air = true;
+    obj->vert_speed += 0.05;
+    set_object_pos(obj, obj->x, obj->y + obj->vert_speed);
+
+    for(int i = 0; i < bricks_number; i++ ) {    
+        if(is_collision(*obj, bricks[i] ) ) {
+            if(obj[0].vert_speed > 0)
+                obj[0].in_air = false;
+
+            if(bricks[i].c_type == '?' && obj[0].vert_speed < 0 && obj == &memerio) {
+                bricks[i].c_type = '-';
+                init_object(get_new_movable(), bricks[i].x, bricks[i].y-3, 3, 2, '$');
+                movables[movables_number - 1].vert_speed = -0.7;
+            }
+
+            obj->y -= obj->vert_speed;
+            obj->vert_speed = 0;
+
+            if(bricks[i].c_type == 'w') {
+                level++;
+                if(level > max_level) {
+                    printf("w w w w w w w wwin win win w w w w w");
+                    level = 1;
+                } 
+                system("color 2F");
+                Sleep(1000);
+
+                create_level(level);
+            }
+            break;
+        }
+    }
+}
+
 void horizon_move_object(TObject *obj) {
     obj[0].x += obj[0].horiz_speed;
 
@@ -345,29 +306,6 @@ void horizon_move_object(TObject *obj) {
     }
 }
 
-bool is_pos_in_map(int x, int y) {
-    return (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT);
-}
-
-void put_object_on_map(TObject obj) {
-    int ix = static_cast<int>(round(obj.x));
-    int iy = static_cast<int>(round(obj.y));
-    int i_width = static_cast<int>(round(obj.width));
-    int i_height = static_cast<int>(round(obj.height));
-
-    for(int i = ix; i < (ix + i_width); i++) 
-        for(int j = iy; j < (iy + i_height); j++)
-            if(is_pos_in_map(i, j))
-                map[j][i] = obj.c_type;
-}
-
-void set_cursor(int x, int y) {
-    COORD coord;
-    coord.X = x;
-    coord.Y = y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-}
-
 void horizontal_move_map(float dx) {
     memerio.x -= dx;
     for(int i = 0; i < bricks_number; i++) {
@@ -384,7 +322,71 @@ void horizontal_move_map(float dx) {
         movables[i].x += dx;
 }
 
+void put_object_on_map(TObject obj) {
+    int ix = static_cast<int>(round(obj.x));
+    int iy = static_cast<int>(round(obj.y));
+    int i_width = static_cast<int>(round(obj.width));
+    int i_height = static_cast<int>(round(obj.height));
+
+    for(int i = ix; i < (ix + i_width); i++) 
+        for(int j = iy; j < (iy + i_height); j++)
+            if(is_pos_in_map(i, j))
+                map[j][i] = obj.c_type;
+}
+
+void set_object_pos(TObject *obj, float x_pos, float y_pos) {
+    obj->x = x_pos;
+    obj->y = y_pos;
+}
+
+bool is_pos_in_map(int x, int y) {
+    return (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT);
+}
+
 bool is_collision(TObject obj1, TObject obj2) {
     return (obj1.x + obj1.width > obj2.x && obj1.x < obj2.x + obj2.width && 
             obj1.y + obj1.height > obj2.y && obj1.y < obj2.y + obj2.height); 
+}
+
+
+void init_object(TObject *obj, float x_pos, float y_pos, float o_width, float o_height, char obj_type) {
+    set_object_pos(obj, x_pos, y_pos);
+    obj->width = o_width;
+    obj->height = o_height;
+    obj->vert_speed = 0;
+    obj->c_type = obj_type;
+    obj->horiz_speed = 0.2;
+}
+
+TObject *get_new_brick() {
+    bricks_number++;
+    TObject *temp_arr = new TObject[bricks_number];
+    for(int i = 0; i < bricks_number-1; i++) {
+        temp_arr[i] = bricks[i];
+    }
+    delete[] bricks;
+    bricks = temp_arr;
+    return &bricks[bricks_number-1];
+}
+
+TObject *get_new_movable() {
+    movables_number++;
+    TObject *temp_arr = new TObject[movables_number];
+    for(int i = 0; i < movables_number - 1; i++) {
+        temp_arr[i] = movables[i];
+    }
+    delete[] movables;
+    movables = temp_arr;
+    return &movables[movables_number-1];
+}
+
+void delete_movable(int i) {
+    movables_number--;
+    movables[i] = movables[movables_number];
+    TObject *temp_arr = new TObject[movables_number];
+    for(int i = 0; i < movables_number; i++) {
+        temp_arr[i] = movables[i];
+    }
+    delete[] movables;
+    movables = temp_arr;
 }
