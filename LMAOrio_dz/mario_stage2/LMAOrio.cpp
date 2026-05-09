@@ -1,12 +1,6 @@
 #include "functions.hpp"
 
-
-
 TObject memerio;
-
-int score;
-int level = 1;
-int max_level;
 
 int main() {
 
@@ -16,8 +10,12 @@ int main() {
     TObject *movables = nullptr;
     int movables_number;
     int bricks_number;
-    create_level(level, bricks, bricks_number, movables, movables_number);
 
+    int score;
+    int level = 1;
+    int max_level;
+
+    create_level(level, bricks, bricks_number, movables, movables_number, score, max_level);
 
     do  {
         clear_map(map);
@@ -26,17 +24,17 @@ int main() {
         if(GetKeyState(VK_LEFT) < 0) horizontal_move_map(1, bricks, movables, bricks_number, movables_number);
         if(GetKeyState(VK_RIGHT) < 0) horizontal_move_map(-1, bricks, movables, bricks_number, movables_number);
 
-        if(memerio.y > MAP_HEIGHT) player_died(level, bricks, bricks_number, movables, movables_number);
+        if(memerio.y > MAP_HEIGHT) player_died(level, bricks, bricks_number, movables, movables_number, score, max_level);
 
-        vert_move_object(&memerio, bricks, movables, bricks_number, movables_number);
-        player_collision(movables, movables_number, bricks_number, bricks);
+        vert_move_object(&memerio, bricks, movables, bricks_number, movables_number, score, level, max_level);
+        player_collision(movables, movables_number, bricks_number, bricks, score, level, max_level);
 
         for(int i = 0; i < bricks_number; i++) {
             put_object_on_map(bricks[i], map);
         }
         for(int i = 0; i < movables_number; i++) {
-            vert_move_object(movables + i, bricks, movables, bricks_number, movables_number);
-            horizon_move_object(movables + i, bricks, movables, bricks_number, movables_number);
+            vert_move_object(movables + i, bricks, movables, bricks_number, movables_number, score, level, max_level);
+            horizon_move_object(movables + i, bricks, movables, bricks_number, movables_number, score, level, max_level);
             if(movables[i].y > MAP_HEIGHT) {
                 delete_obj(movables, movables_number, i);
                 i--;

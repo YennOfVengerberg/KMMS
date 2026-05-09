@@ -24,12 +24,14 @@ void clear_map(char map[MAP_HEIGHT][MAP_WIDTH + 1]); //displays
 void show_map(char map[MAP_HEIGHT][MAP_WIDTH + 1]);
 void display_score(int score, char map[MAP_HEIGHT][MAP_WIDTH + 1]);
 void set_cursor(int x, int y);
-void create_level(int level, TObject* &bricks, int &bricks_number, TObject* &movables, int &movables_number);
+void create_level(int level, TObject* &bricks, int &bricks_number, TObject* &movables, int &movables_number, int &score, int &max_level);
 
-void player_collision(TObject* &movables, int &movables_number, int &bricks_number, TObject* &bricks); //game logic
-void player_died(int level, TObject* &bricks, int &bricks_number, TObject* &movables, int &movables_number);
-void vert_move_object(TObject *obj, TObject* &bricks, TObject* &movables, int &bricks_number, int &movables_number);
-void horizon_move_object(TObject *obj, TObject* &bricks, TObject* &movables, int &bricks_number, int &movables_number);
+void player_collision(TObject* &movables, int &movables_number, int &bricks_number, TObject* &bricks, int &score, int &level, int &max_level); //game logic
+void player_died(int level, TObject* &bricks, int &bricks_number, 
+    TObject* &movables, int &movables_number, int &score, int &max_level);
+void vert_move_object(TObject *obj, TObject* &bricks, TObject* &movables, int &bricks_number, int &movables_number, int &score, int &level, int &max_level);
+void horizon_move_object(TObject *obj, TObject* &bricks, TObject* &movables, 
+    int &bricks_number, int &movables_number, int &score, int &level, int &max_level);
 void horizontal_move_map(float dx, TObject* &bricks, TObject* &movables, int bricks_number, int movables_number);
 void put_object_on_map(TObject obj, char map[MAP_HEIGHT][MAP_WIDTH + 1]);
 void set_object_pos(TObject *obj, float x_pos, float y_pos);

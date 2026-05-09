@@ -1,6 +1,5 @@
 #include "functions.hpp"
 
-extern int max_level, level, score;
 extern TObject memerio;
 
 void clear_map(char map[MAP_HEIGHT][MAP_WIDTH + 1]) {
@@ -34,7 +33,8 @@ void set_cursor(int x, int y) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void create_level(int level, TObject* &bricks, int &bricks_number, TObject* &movables, int &movables_number) {
+void create_level(int level, TObject* &bricks, int &bricks_number, 
+    TObject* &movables, int &movables_number, int &score, int &max_level) {
     system("color 1F");
 
     delete[] bricks;
@@ -221,7 +221,8 @@ void create_level(int level, TObject* &bricks, int &bricks_number, TObject* &mov
 }
 
 
-void player_collision(TObject* &movables, int &movables_number, int &bricks_number, TObject* &bricks) {
+void player_collision(TObject* &movables, int &movables_number, 
+    int &bricks_number, TObject* &bricks, int &score, int &level, int &max_level) {
     for(int i = 0; i < movables_number; i++) {
         if(is_collision(memerio, movables[i])) {
             if(movables[i].c_type == 'o') {
@@ -245,13 +246,15 @@ void player_collision(TObject* &movables, int &movables_number, int &bricks_numb
     }
 }
 
-void player_died(int level, TObject* &bricks, int &bricks_number, TObject* &movables, int &movables_number) {
+void player_died(int level, TObject* &bricks, int &bricks_number, 
+    TObject* &movables, int &movables_number, int &score, int &max_level) {
     system("color 4F");
     Sleep(500);
-    create_level(level, bricks, bricks_number, movables, movables_number);
+    create_level(level, bricks, bricks_number, movables, movables_number, score, max_level);
 }
 
-void vert_move_object(TObject *obj, TObject* &bricks, TObject* &movables, int &bricks_number, int &movables_number) {
+void vert_move_object(TObject *obj, TObject* &bricks, TObject* &movables, 
+    int &bricks_number, int &movables_number, int &score, int &level, int &max_level) {
     obj->in_air = true;
     obj->vert_speed += 0.05;
     set_object_pos(obj, obj->x, obj->y + obj->vert_speed);
@@ -280,14 +283,15 @@ void vert_move_object(TObject *obj, TObject* &bricks, TObject* &movables, int &b
                 system("color 2F");
                 Sleep(1000);
 
-                create_level(level, bricks, bricks_number, movables, movables_number);
+                create_level(level, bricks, bricks_number, movables, movables_number, score, max_level);
             }
             break;
         }
     }
 }
 
-void horizon_move_object(TObject *obj, TObject* &bricks, TObject* &movables, int &bricks_number, int &movables_number) {
+void horizon_move_object(TObject *obj, TObject* &bricks, TObject* &movables, 
+    int &bricks_number, int &movables_number, int &score, int &level, int &max_level) {
     obj[0].x += obj[0].horiz_speed;
 
     for(int i = 0; i < bricks_number; i++) {
@@ -300,7 +304,7 @@ void horizon_move_object(TObject *obj, TObject* &bricks, TObject* &movables, int
     }
     if(obj[0].c_type == 'o') { 
         TObject temp = *obj;
-        vert_move_object(&temp, bricks, movables, bricks_number, movables_number);
+        vert_move_object(&temp, bricks, movables, bricks_number, movables_number, score, level, max_level);
         if(temp.in_air == true) {
             obj[0].x -= obj[0].horiz_speed;
             obj[0].horiz_speed = -obj[0].horiz_speed;
