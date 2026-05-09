@@ -1,11 +1,13 @@
 #include "functions.hpp"
+#include "obj_types.hpp"
 
-TObject memerio;
+
 
 int main() {
-
     char map[MAP_HEIGHT][MAP_WIDTH + 1] = {};
     
+    TObject memerio;
+
     TObject *bricks = nullptr;
     TObject *movables = nullptr;
     int movables_number;

@@ -1,4 +1,5 @@
 #include "functions.hpp"
+#include "obj_types.hpp"
 
 void clear_map(char map[MAP_HEIGHT][MAP_WIDTH + 1]) {
     for (int j = 0; j < MAP_HEIGHT; j++) {
@@ -48,171 +49,171 @@ void create_level(int level, TObject* &bricks, int &bricks_number,
 
     if (level == 1)
     {
-        init_object(get_new_object(bricks, bricks_number),  0, 21, 207, 4, '#');
+        init_object(get_new_object(bricks, bricks_number),  0, 21, 207, 4, obj_types::brick);
 
-            init_object(get_new_object(bricks, bricks_number), 48, 13, 3, 2, '?');
-            init_object(get_new_object(bricks, bricks_number), 60, 13, 3, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 63, 13, 3, 2, '?');
-            init_object(get_new_object(bricks, bricks_number), 66, 13, 3, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 69, 13, 3, 2, '?');
-            init_object(get_new_object(bricks, bricks_number), 72, 13, 3, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 66, 5, 3, 2, '?');
+            init_object(get_new_object(bricks, bricks_number), 48, 13, 3, 2, obj_types::question_brick);
+            init_object(get_new_object(bricks, bricks_number), 60, 13, 3, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 63, 13, 3, 2, obj_types::question_brick);
+            init_object(get_new_object(bricks, bricks_number), 66, 13, 3, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 69, 13, 3, 2, obj_types::question_brick);
+            init_object(get_new_object(bricks, bricks_number), 72, 13, 3, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 66, 5, 3, 2, obj_types::question_brick);
 
-        init_object(get_new_object(bricks, bricks_number), 84, 17, 6, 2, '#');
-        init_object(get_new_object(bricks, bricks_number), 85, 19, 4, 2, '#');
+        init_object(get_new_object(bricks, bricks_number), 84, 17, 6, 2, obj_types::brick);
+        init_object(get_new_object(bricks, bricks_number), 85, 19, 4, 2, obj_types::brick);
 
-        init_object(get_new_object(bricks, bricks_number), 114, 15, 6, 2, '#');
-        init_object(get_new_object(bricks, bricks_number), 115, 17, 4, 4, '#');
+        init_object(get_new_object(bricks, bricks_number), 114, 15, 6, 2, obj_types::brick);
+        init_object(get_new_object(bricks, bricks_number), 115, 17, 4, 4, obj_types::brick);
 
-        init_object(get_new_object(bricks, bricks_number), 138, 13, 6, 2, '#');
-        init_object(get_new_object(bricks, bricks_number), 139, 15, 4, 6, '#');
+        init_object(get_new_object(bricks, bricks_number), 138, 13, 6, 2, obj_types::brick);
+        init_object(get_new_object(bricks, bricks_number), 139, 15, 4, 6, obj_types::brick);
 
-        init_object(get_new_object(bricks, bricks_number), 171, 13, 6, 2, '#');
-        init_object(get_new_object(bricks, bricks_number), 172, 15, 4, 6, '#');
+        init_object(get_new_object(bricks, bricks_number), 171, 13, 6, 2, obj_types::brick);
+        init_object(get_new_object(bricks, bricks_number), 172, 15, 4, 6, obj_types::brick);
         // --
-        init_object(get_new_object(bricks, bricks_number),  213, 21, 45, 4, '#');
-            init_object(get_new_object(bricks, bricks_number), 231, 13, 3, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 234, 13, 3, 2, '?');
-            init_object(get_new_object(bricks, bricks_number), 237, 13, 3, 2, '#');
-                init_object(get_new_object(bricks, bricks_number), 240, 5, 24, 2, '#');
+        init_object(get_new_object(bricks, bricks_number),  213, 21, 45, 4, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 231, 13, 3, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 234, 13, 3, 2, obj_types::question_brick);
+            init_object(get_new_object(bricks, bricks_number), 237, 13, 3, 2, obj_types::brick);
+                init_object(get_new_object(bricks, bricks_number), 240, 5, 24, 2, obj_types::brick);
         // --
-        init_object(get_new_object(bricks, bricks_number),  267, 21, 192, 4, '#');
-                init_object(get_new_object(bricks, bricks_number), 273, 5, 9, 2, '#');
-                init_object(get_new_object(bricks, bricks_number), 282, 5, 3, 2, '?');
-            init_object(get_new_object(bricks, bricks_number), 282, 13, 3, 2, '?');
-            init_object(get_new_object(bricks, bricks_number), 300, 13, 6, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 318, 13, 3, 2, '?');
-            init_object(get_new_object(bricks, bricks_number), 327, 13, 3, 2, '?');
-                init_object(get_new_object(bricks, bricks_number), 327, 5, 3, 2, '?');
-            init_object(get_new_object(bricks, bricks_number), 336, 13, 3, 2, '?');
-            init_object(get_new_object(bricks, bricks_number), 354, 13, 3, 2, '#');
-                init_object(get_new_object(bricks, bricks_number), 363, 5, 9, 2, '#');
-                init_object(get_new_object(bricks, bricks_number), 384, 5, 3, 2, '#');
-                init_object(get_new_object(bricks, bricks_number), 387, 5, 3, 2, '?');
-                init_object(get_new_object(bricks, bricks_number), 390, 5, 3, 2, '?');
-                init_object(get_new_object(bricks, bricks_number), 393, 5, 3, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 387, 13, 6, 2, '#');
+        init_object(get_new_object(bricks, bricks_number),  267, 21, 192, 4, obj_types::brick);
+                init_object(get_new_object(bricks, bricks_number), 273, 5, 9, 2, obj_types::brick);
+                init_object(get_new_object(bricks, bricks_number), 282, 5, 3, 2, obj_types::question_brick);
+            init_object(get_new_object(bricks, bricks_number), 282, 13, 3, 2, obj_types::question_brick);
+            init_object(get_new_object(bricks, bricks_number), 300, 13, 6, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 318, 13, 3, 2, obj_types::question_brick);
+            init_object(get_new_object(bricks, bricks_number), 327, 13, 3, 2, obj_types::question_brick);
+                init_object(get_new_object(bricks, bricks_number), 327, 5, 3, 2, obj_types::question_brick);
+            init_object(get_new_object(bricks, bricks_number), 336, 13, 3, 2, obj_types::question_brick);
+            init_object(get_new_object(bricks, bricks_number), 354, 13, 3, 2, obj_types::brick);
+                init_object(get_new_object(bricks, bricks_number), 363, 5, 9, 2, obj_types::brick);
+                init_object(get_new_object(bricks, bricks_number), 384, 5, 3, 2, obj_types::brick);
+                init_object(get_new_object(bricks, bricks_number), 387, 5, 3, 2, obj_types::question_brick);
+                init_object(get_new_object(bricks, bricks_number), 390, 5, 3, 2, obj_types::question_brick);
+                init_object(get_new_object(bricks, bricks_number), 393, 5, 3, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 387, 13, 6, 2, obj_types::brick);
             //лестница
-            init_object(get_new_object(bricks, bricks_number), 402, 19, 12, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 405, 17, 9, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 408, 15, 6, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 411, 13, 3, 2, '#');
+            init_object(get_new_object(bricks, bricks_number), 402, 19, 12, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 405, 17, 9, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 408, 15, 6, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 411, 13, 3, 2, obj_types::brick);
 
-            init_object(get_new_object(bricks, bricks_number), 420, 13, 3, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 420, 15, 6, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 420, 17, 9, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 420, 19, 12, 2, '#');
+            init_object(get_new_object(bricks, bricks_number), 420, 13, 3, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 420, 15, 6, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 420, 17, 9, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 420, 19, 12, 2, obj_types::brick);
 
-            init_object(get_new_object(bricks, bricks_number), 444, 19, 15, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 447, 17, 12, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 450, 15, 9, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 453, 13, 6, 2, '#');
+            init_object(get_new_object(bricks, bricks_number), 444, 19, 15, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 447, 17, 12, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 450, 15, 9, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 453, 13, 6, 2, obj_types::brick);
         // --
-        init_object(get_new_object(bricks, bricks_number), 465, 21, 165, 4, '#');
-            init_object(get_new_object(bricks, bricks_number), 465, 13, 3, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 465, 15, 6, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 465, 17, 9, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 465, 19, 12, 2, '#');
+        init_object(get_new_object(bricks, bricks_number), 465, 21, 165, 4, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 465, 13, 3, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 465, 15, 6, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 465, 17, 9, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 465, 19, 12, 2, obj_types::brick);
 
-            init_object(get_new_object(bricks, bricks_number), 489, 17, 6, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 490, 19, 4, 2, '#');
+            init_object(get_new_object(bricks, bricks_number), 489, 17, 6, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 490, 19, 4, 2, obj_types::brick);
 
-            init_object(get_new_object(bricks, bricks_number), 504, 13, 6, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 510, 13, 3, 2, '?');
-            init_object(get_new_object(bricks, bricks_number), 513, 13, 3, 2, '#');
+            init_object(get_new_object(bricks, bricks_number), 504, 13, 6, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 510, 13, 3, 2, obj_types::question_brick);
+            init_object(get_new_object(bricks, bricks_number), 513, 13, 3, 2, obj_types::brick);
 
-            init_object(get_new_object(bricks, bricks_number), 537, 17, 6, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 538, 19, 4, 2, '#');
+            init_object(get_new_object(bricks, bricks_number), 537, 17, 6, 2, obj_types::brick  );
+            init_object(get_new_object(bricks, bricks_number), 538, 19, 4, 2, obj_types::brick);
             // лестница большая
-            init_object(get_new_object(bricks, bricks_number), 543, 19, 27, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 546, 17, 24, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 549, 15, 21, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 552, 13, 18, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 555, 11, 15, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 558,  9, 12, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 561,  7,  9, 2, '#');
-            init_object(get_new_object(bricks, bricks_number), 564,  5,  6, 2, '#');
+            init_object(get_new_object(bricks, bricks_number), 543, 19, 27, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 546, 17, 24, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 549, 15, 21, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 552, 13, 18, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 555, 11, 15, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 558,  9, 12, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 561,  7,  9, 2, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 564,  5,  6, 2, obj_types::brick);
 
             // замок
-            init_object(get_new_object(bricks, bricks_number), 600, 16, 10, 5, 'w');
-                init_object(get_new_object(bricks, bricks_number), 600, 15, 1, 1, 'w');
-                init_object(get_new_object(bricks, bricks_number), 609, 15, 1, 1, 'w');
-                init_object(get_new_object(bricks, bricks_number), 604, 17, 2, 4, '-');
-            init_object(get_new_object(bricks, bricks_number), 602, 12, 6, 4, 'w');
-                init_object(get_new_object(bricks, bricks_number), 602, 11, 1, 1, 'w');
-                init_object(get_new_object(bricks, bricks_number), 604, 11, 2, 1, 'w');
-                init_object(get_new_object(bricks, bricks_number), 607, 11, 1, 1, 'w');
-                init_object(get_new_object(bricks, bricks_number), 603, 13, 1, 2, '-');
-                init_object(get_new_object(bricks, bricks_number), 606, 13, 1, 2, '-');
+            init_object(get_new_object(bricks, bricks_number), 600, 16, 10, 5, obj_types::win_zone);
+                init_object(get_new_object(bricks, bricks_number), 600, 15, 1, 1, obj_types::win_zone);
+                init_object(get_new_object(bricks, bricks_number), 609, 15, 1, 1, obj_types::win_zone);
+                init_object(get_new_object(bricks, bricks_number), 604, 17, 2, 4, obj_types::empty_brick);
+            init_object(get_new_object(bricks, bricks_number), 602, 12, 6, 4, obj_types::win_zone);
+                init_object(get_new_object(bricks, bricks_number), 602, 11, 1, 1, obj_types::win_zone);
+                init_object(get_new_object(bricks, bricks_number), 604, 11, 2, 1, obj_types::win_zone);
+                init_object(get_new_object(bricks, bricks_number), 607, 11, 1, 1, obj_types::win_zone);
+                init_object(get_new_object(bricks, bricks_number), 603, 13, 1, 2, obj_types::empty_brick);
+                init_object(get_new_object(bricks, bricks_number), 606, 13, 1, 2, obj_types::empty_brick);
 
-        init_object(get_new_object(movables, movables_number), 66, 16, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 121, 16, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 153, 16, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 159, 16, 3, 2, 'o');
+        init_object(get_new_object(movables, movables_number), 66, 16, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 121, 16, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 153, 16, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 159, 16, 3, 2, obj_types::enemy);
 
-            init_object(get_new_object(movables, movables_number), 238, 1, 3, 2, 'o');
-            init_object(get_new_object(movables, movables_number), 246, 1, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 288, 16, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 294, 16, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 321, 16, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 342, 16, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 348, 16, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 370, 16, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 376, 16, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 385, 16, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 391, 16, 3, 2, 'o');
+            init_object(get_new_object(movables, movables_number), 238, 1, 3, 2, obj_types::enemy);
+            init_object(get_new_object(movables, movables_number), 246, 1, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 288, 16, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 294, 16, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 321, 16, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 342, 16, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 348, 16, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 370, 16, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 376, 16, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 385, 16, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 391, 16, 3, 2, obj_types::enemy);
 
-        init_object(get_new_object(movables, movables_number), 522, 16, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 526, 16, 3, 2, 'o');
+        init_object(get_new_object(movables, movables_number), 522, 16, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 526, 16, 3, 2, obj_types::enemy);
 
     }
 
     if(level == 2) {
-        init_object(get_new_object(bricks, bricks_number), 20, 20, 40, 5, '2');
-            init_object(get_new_object(bricks, bricks_number), 30, 10, 5, 3, '?');
-            init_object(get_new_object(bricks, bricks_number), 50, 10, 5, 3, '?');
-        init_object(get_new_object(bricks, bricks_number), 60, 15, 40, 10, '2');
-            init_object(get_new_object(bricks, bricks_number), 60, 5, 10, 3, '-');
-            init_object(get_new_object(bricks, bricks_number), 70, 5, 5, 3, '?');
-            init_object(get_new_object(bricks, bricks_number), 75, 5, 5, 3, '-');
-            init_object(get_new_object(bricks, bricks_number), 80, 5, 5, 3, '?');
-            init_object(get_new_object(bricks, bricks_number), 85, 5, 10, 3, '-');
-        init_object(get_new_object(bricks, bricks_number), 100, 20, 20, 5, '2');
-        init_object(get_new_object(bricks, bricks_number), 120, 15, 10, 10, '2');
-        init_object(get_new_object(bricks, bricks_number), 150, 20, 40, 5, '2');
-        init_object(get_new_object(bricks, bricks_number), 210, 15, 10, 10, 'w');
+        init_object(get_new_object(bricks, bricks_number), 20, 20, 40, 5, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 30, 10, 5, 3, obj_types::question_brick);
+            init_object(get_new_object(bricks, bricks_number), 50, 10, 5, 3, obj_types::question_brick);
+        init_object(get_new_object(bricks, bricks_number), 60, 15, 40, 10, obj_types::brick);
+            init_object(get_new_object(bricks, bricks_number), 60, 5, 10, 3, obj_types::empty_brick);
+            init_object(get_new_object(bricks, bricks_number), 70, 5, 5, 3, obj_types::question_brick);
+            init_object(get_new_object(bricks, bricks_number), 75, 5, 5, 3, obj_types::empty_brick);
+            init_object(get_new_object(bricks, bricks_number), 80, 5, 5, 3, obj_types::question_brick);
+            init_object(get_new_object(bricks, bricks_number), 85, 5, 10, 3, obj_types::empty_brick);
+        init_object(get_new_object(bricks, bricks_number), 100, 20, 20, 5, obj_types::brick);
+        init_object(get_new_object(bricks, bricks_number), 120, 15, 10, 10, obj_types::brick);
+        init_object(get_new_object(bricks, bricks_number), 150, 20, 40, 5, obj_types::brick);
+        init_object(get_new_object(bricks, bricks_number), 210, 15, 10, 10, obj_types::win_zone);
 
-        init_object(get_new_object(movables, movables_number), 25, 10, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 80, 10, 3, 2, 'o');
+        init_object(get_new_object(movables, movables_number), 25, 10, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 80, 10, 3, 2, obj_types::enemy);
     }
     if(level == 3) {
-        init_object(get_new_object(bricks, bricks_number), 20, 20, 40, 5, '2');
-        init_object(get_new_object(bricks, bricks_number), 60, 15, 10, 10, '2');
-        init_object(get_new_object(bricks, bricks_number), 80, 20, 20, 5, '2');
-        init_object(get_new_object(bricks, bricks_number), 120, 15, 10, 10, '2');
-        init_object(get_new_object(bricks, bricks_number), 155, 20, 40, 5, '2');
-        init_object(get_new_object(bricks, bricks_number), 210, 15, 10, 10, 'w');
+        init_object(get_new_object(bricks, bricks_number), 20, 20, 40, 5, obj_types::brick);
+        init_object(get_new_object(bricks, bricks_number), 60, 15, 10, 10, obj_types::brick);
+        init_object(get_new_object(bricks, bricks_number), 80, 20, 20, 5, obj_types::brick);
+        init_object(get_new_object(bricks, bricks_number), 120, 15, 10, 10, obj_types::brick);
+        init_object(get_new_object(bricks, bricks_number), 155, 20, 40, 5, obj_types::brick);
+        init_object(get_new_object(bricks, bricks_number), 210, 15, 10, 10, obj_types::win_zone);
 
-        init_object(get_new_object(movables, movables_number), 25, 10, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 80, 10, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 65, 10, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 120, 10, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 160, 10, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 175, 10, 3, 2, 'o');
-        
+        init_object(get_new_object(movables, movables_number), 25, 10, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 80, 10, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 65, 10, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 120, 10, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 160, 10, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 175, 10, 3, 2, obj_types::enemy);
+
     }
     if(level == 4) {
-        init_object(get_new_object(bricks, bricks_number), 20, 20, 40, 5, '2');
-        init_object(get_new_object(bricks, bricks_number), 80, 20, 15, 5, '2');
-        init_object(get_new_object(bricks, bricks_number), 120, 15, 15, 10, '2');
-        init_object(get_new_object(bricks, bricks_number), 160, 10, 15, 15, 'w');
+        init_object(get_new_object(bricks, bricks_number), 20, 20, 40, 5, obj_types::brick);
+        init_object(get_new_object(bricks, bricks_number), 80, 20, 15, 5, obj_types::brick);
+        init_object(get_new_object(bricks, bricks_number), 120, 15, 15, 10, obj_types::brick);
+        init_object(get_new_object(bricks, bricks_number), 160, 10, 15, 15, obj_types::win_zone);
 
-        init_object(get_new_object(movables, movables_number), 25, 10, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 50, 10, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 80, 10, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 90, 10, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 120, 10, 3, 2, 'o');
-        init_object(get_new_object(movables, movables_number), 130, 10, 3, 2, 'o');
+        init_object(get_new_object(movables, movables_number), 25, 10, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 50, 10, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 80, 10, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 90, 10, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 120, 10, 3, 2, obj_types::enemy);
+        init_object(get_new_object(movables, movables_number), 130, 10, 3, 2, obj_types::enemy);
     }
     
     max_level = 3;
@@ -223,7 +224,7 @@ void player_collision(TObject* &movables, int &movables_number,
     int &bricks_number, TObject* &bricks, int &score, int &level, int &max_level, TObject &memerio) {
     for(int i = 0; i < movables_number; i++) {
         if(is_collision(memerio, movables[i])) {
-            if(movables[i].c_type == 'o') {
+            if(movables[i].c_type == obj_types::enemy) {
                 if(memerio.in_air == true && memerio.vert_speed > 0 
                     && memerio.y + memerio.height < movables[i].y + movables[i].height * 0.5) {
                         delete_obj(movables, movables_number, i);
@@ -234,7 +235,7 @@ void player_collision(TObject* &movables, int &movables_number,
                         player_died(level, bricks, bricks_number, movables, movables_number, score, max_level, memerio);
             }
 
-            if(movables[i].c_type == '$') {
+            if(movables[i].c_type == obj_types::money) {
                 delete_obj(movables, movables_number, i);
                 i--;
                 score += 100;
@@ -262,17 +263,16 @@ void vert_move_object(TObject *obj, TObject* &bricks, TObject* &movables,
             if(obj[0].vert_speed > 0)
                 obj[0].in_air = false;
 
-            if(bricks[i].c_type == '?' && obj[0].vert_speed < 0 && obj == &memerio) {
-                bricks[i].c_type = '-';
-                //init_object(get_new_object(movables, movables_number), bricks[i].x, bricks[i].y-3, 3, 2, '$');
-                init_object(get_new_object(movables, movables_number), bricks[i].x, bricks[i].y-3, 3, 2, '$');
+            if(bricks[i].c_type == obj_types::question_brick && obj[0].vert_speed < 0 && obj == &memerio) {
+                bricks[i].c_type = obj_types::empty_brick;
+                init_object(get_new_object(movables, movables_number), bricks[i].x, bricks[i].y-3, 3, 2, obj_types::money);
                 movables[movables_number - 1].vert_speed = -0.7;
             }
 
             obj->y -= obj->vert_speed;
             obj->vert_speed = 0;
 
-            if(bricks[i].c_type == 'w') {
+            if(bricks[i].c_type == obj_types::win_zone) {
                 level++;
                 if(level > max_level) {
                     printf("w w w w w w w wwin win win w w w w w");
@@ -300,7 +300,7 @@ void horizon_move_object(TObject *obj, TObject* &bricks, TObject* &movables,
         }
 
     }
-    if(obj[0].c_type == 'o') { 
+    if(obj[0].c_type == obj_types::enemy) { 
         TObject temp = *obj;
         vert_move_object(&temp, bricks, movables, bricks_number, movables_number, score, level, max_level, memerio);
         if(temp.in_air == true) {
