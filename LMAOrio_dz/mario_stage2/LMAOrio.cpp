@@ -25,22 +25,22 @@ int main() {
         clear_map();
 
         if(memerio.in_air == FALSE && GetKeyState(VK_UP) < 0) memerio.vert_speed = -1.0;
-        if(GetKeyState(VK_LEFT) < 0) horizontal_move_map(1);
-        if(GetKeyState(VK_RIGHT) < 0) horizontal_move_map(-1);
+        if(GetKeyState(VK_LEFT) < 0) horizontal_move_map(1, bricks, movables);
+        if(GetKeyState(VK_RIGHT) < 0) horizontal_move_map(-1, bricks, movables);
 
         if(memerio.y > map_height) player_died();
 
-        vert_move_object(&memerio);
-        player_collision();
+        vert_move_object(&memerio, bricks, movables);
+        player_collision(movables);
 
         for(int i = 0; i < bricks_number; i++) {
             put_object_on_map(bricks[i]);
         }
         for(int i = 0; i < movables_number; i++) {
-            vert_move_object(movables + i);
-            horizon_move_object(movables + i);
+            vert_move_object(movables + i, bricks, movables);
+            horizon_move_object(movables + i, bricks, movables);
             if(movables[i].y > map_height) {
-                delete_movable(i);
+                delete_obj(movables, movables_number, i);
                 i--;
                 continue;
             }
