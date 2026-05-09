@@ -20,18 +20,18 @@ struct TObject {
 };
 
 
-void clear_map(); //displays
-void show_map();
-void display_score();
+void clear_map(char map[MAP_HEIGHT][MAP_WIDTH + 1]); //displays
+void show_map(char map[MAP_HEIGHT][MAP_WIDTH + 1]);
+void display_score(int score, char map[MAP_HEIGHT][MAP_WIDTH + 1]);
 void set_cursor(int x, int y);
-void create_level(int level);
+void create_level(int level, TObject* &bricks, int &bricks_number, TObject* &movables, int &movables_number);
 
-void player_collision(TObject* &movables); //game logic
-void player_died();
-void vert_move_object(TObject *obj, TObject* &bricks, TObject* &movables);
-void horizon_move_object(TObject *obj, TObject* &bricks, TObject* &movables);
-void horizontal_move_map(float dx, TObject* &bricks, TObject* &movables);
-void put_object_on_map(TObject obj);
+void player_collision(TObject* &movables, int &movables_number, int &bricks_number, TObject* &bricks); //game logic
+void player_died(int level, TObject* &bricks, int &bricks_number, TObject* &movables, int &movables_number);
+void vert_move_object(TObject *obj, TObject* &bricks, TObject* &movables, int &bricks_number, int &movables_number);
+void horizon_move_object(TObject *obj, TObject* &bricks, TObject* &movables, int &bricks_number, int &movables_number);
+void horizontal_move_map(float dx, TObject* &bricks, TObject* &movables, int bricks_number, int movables_number);
+void put_object_on_map(TObject obj, char map[MAP_HEIGHT][MAP_WIDTH + 1]);
 void set_object_pos(TObject *obj, float x_pos, float y_pos);
 bool is_pos_in_map(int x, int y);
 bool is_collision(TObject obj1, TObject obj2);

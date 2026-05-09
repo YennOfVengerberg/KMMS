@@ -1,25 +1,24 @@
 #include "functions.hpp"
 
-extern char map[MAP_HEIGHT][MAP_WIDTH + 1];
 extern int max_level, level, score;
-extern TObject* bricks;
-extern TObject* movables;
 extern TObject memerio;
-extern int bricks_number, movables_number;
 
-void clear_map() {
-    for(int i = 0; i < MAP_WIDTH; i++) 
-        for(int j = 1; j < MAP_HEIGHT; j++)
+void clear_map(char map[MAP_HEIGHT][MAP_WIDTH + 1]) {
+    for (int j = 0; j < MAP_HEIGHT; j++) {
+        for (int i = 0; i < MAP_WIDTH; i++) {   
             map[j][i] = ' ';
+        }
+        map[j][MAP_WIDTH] = '\0';
+    }
 }
 
-void show_map() {
-    map[MAP_HEIGHT - 1][MAP_WIDTH] = '\0';
-    for(int j = 0; j < MAP_HEIGHT; j++)
+void show_map(char map[MAP_HEIGHT][MAP_WIDTH + 1]) {
+    for (int j = 0; j < MAP_HEIGHT; j++) {
         std::cout << map[j];
+    }
 }
 
-void display_score() {
+void display_score(int score, char map[MAP_HEIGHT][MAP_WIDTH + 1]) {
     char c[30];
     sprintf(c, "SCORE: %d", score);
     int len = strlen(c);
@@ -35,7 +34,7 @@ void set_cursor(int x, int y) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void create_level(int level) {
+void create_level(int level, TObject* &bricks, int &bricks_number, TObject* &movables, int &movables_number) {
     system("color 1F");
 
     delete[] bricks;
@@ -222,7 +221,7 @@ void create_level(int level) {
 }
 
 
-void player_collision(TObject* &movables) {
+void player_collision(TObject* &movables, int &movables_number, int &bricks_number, TObject* &bricks) {
     for(int i = 0; i < movables_number; i++) {
         if(is_collision(memerio, movables[i])) {
             if(movables[i].c_type == 'o') {
@@ -233,7 +232,7 @@ void player_collision(TObject* &movables) {
                         score += 50;
                         continue;
                     } else 
-                        player_died();
+                        player_died(level, bricks, bricks_number, movables, movables_number);
             }
 
             if(movables[i].c_type == '$') {
@@ -246,13 +245,13 @@ void player_collision(TObject* &movables) {
     }
 }
 
-void player_died() {
+void player_died(int level, TObject* &bricks, int &bricks_number, TObject* &movables, int &movables_number) {
     system("color 4F");
     Sleep(500);
-    create_level(level);
+    create_level(level, bricks, bricks_number, movables, movables_number);
 }
 
-void vert_move_object(TObject *obj, TObject* &bricks, TObject* &movables) {
+void vert_move_object(TObject *obj, TObject* &bricks, TObject* &movables, int &bricks_number, int &movables_number) {
     obj->in_air = true;
     obj->vert_speed += 0.05;
     set_object_pos(obj, obj->x, obj->y + obj->vert_speed);
@@ -281,14 +280,14 @@ void vert_move_object(TObject *obj, TObject* &bricks, TObject* &movables) {
                 system("color 2F");
                 Sleep(1000);
 
-                create_level(level);
+                create_level(level, bricks, bricks_number, movables, movables_number);
             }
             break;
         }
     }
 }
 
-void horizon_move_object(TObject *obj, TObject* &bricks, TObject* &movables) {
+void horizon_move_object(TObject *obj, TObject* &bricks, TObject* &movables, int &bricks_number, int &movables_number) {
     obj[0].x += obj[0].horiz_speed;
 
     for(int i = 0; i < bricks_number; i++) {
@@ -301,7 +300,7 @@ void horizon_move_object(TObject *obj, TObject* &bricks, TObject* &movables) {
     }
     if(obj[0].c_type == 'o') { 
         TObject temp = *obj;
-        vert_move_object(&temp, bricks, movables);
+        vert_move_object(&temp, bricks, movables, bricks_number, movables_number);
         if(temp.in_air == true) {
             obj[0].x -= obj[0].horiz_speed;
             obj[0].horiz_speed = -obj[0].horiz_speed;
@@ -309,7 +308,7 @@ void horizon_move_object(TObject *obj, TObject* &bricks, TObject* &movables) {
     }
 }
 
-void horizontal_move_map(float dx, TObject* &bricks, TObject* &movables) {
+void horizontal_move_map(float dx, TObject* &bricks, TObject* &movables, int bricks_number, int movables_number) {
     memerio.x -= dx;
     for(int i = 0; i < bricks_number; i++) {
         if(is_collision(memerio, bricks[i])) {
@@ -325,7 +324,7 @@ void horizontal_move_map(float dx, TObject* &bricks, TObject* &movables) {
         movables[i].x += dx;
 }
 
-void put_object_on_map(TObject obj) {
+void put_object_on_map(TObject obj, char map[MAP_HEIGHT][MAP_WIDTH + 1]) {
     int ix = static_cast<int>(round(obj.x));
     int iy = static_cast<int>(round(obj.y));
     int i_width = static_cast<int>(round(obj.width));
