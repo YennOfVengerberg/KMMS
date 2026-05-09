@@ -1,7 +1,5 @@
 #include "functions.hpp"
 
-extern TObject memerio;
-
 void clear_map(char map[MAP_HEIGHT][MAP_WIDTH + 1]) {
     for (int j = 0; j < MAP_HEIGHT; j++) {
         for (int i = 0; i < MAP_WIDTH; i++) {   
@@ -34,7 +32,7 @@ void set_cursor(int x, int y) {
 }
 
 void create_level(int level, TObject* &bricks, int &bricks_number, 
-    TObject* &movables, int &movables_number, int &score, int &max_level) {
+    TObject* &movables, int &movables_number, int &score, int &max_level, TObject &memerio) {
     system("color 1F");
 
     delete[] bricks;
@@ -222,7 +220,7 @@ void create_level(int level, TObject* &bricks, int &bricks_number,
 
 
 void player_collision(TObject* &movables, int &movables_number, 
-    int &bricks_number, TObject* &bricks, int &score, int &level, int &max_level) {
+    int &bricks_number, TObject* &bricks, int &score, int &level, int &max_level, TObject &memerio) {
     for(int i = 0; i < movables_number; i++) {
         if(is_collision(memerio, movables[i])) {
             if(movables[i].c_type == 'o') {
@@ -233,7 +231,7 @@ void player_collision(TObject* &movables, int &movables_number,
                         score += 50;
                         continue;
                     } else 
-                        player_died(level, bricks, bricks_number, movables, movables_number);
+                        player_died(level, bricks, bricks_number, movables, movables_number, score, max_level, memerio);
             }
 
             if(movables[i].c_type == '$') {
@@ -247,14 +245,14 @@ void player_collision(TObject* &movables, int &movables_number,
 }
 
 void player_died(int level, TObject* &bricks, int &bricks_number, 
-    TObject* &movables, int &movables_number, int &score, int &max_level) {
+    TObject* &movables, int &movables_number, int &score, int &max_level, TObject &memerio) {
     system("color 4F");
     Sleep(500);
-    create_level(level, bricks, bricks_number, movables, movables_number, score, max_level);
+    create_level(level, bricks, bricks_number, movables, movables_number, score, max_level, memerio);
 }
 
 void vert_move_object(TObject *obj, TObject* &bricks, TObject* &movables, 
-    int &bricks_number, int &movables_number, int &score, int &level, int &max_level) {
+    int &bricks_number, int &movables_number, int &score, int &level, int &max_level, TObject &memerio) {
     obj->in_air = true;
     obj->vert_speed += 0.05;
     set_object_pos(obj, obj->x, obj->y + obj->vert_speed);
@@ -283,7 +281,7 @@ void vert_move_object(TObject *obj, TObject* &bricks, TObject* &movables,
                 system("color 2F");
                 Sleep(1000);
 
-                create_level(level, bricks, bricks_number, movables, movables_number, score, max_level);
+                create_level(level, bricks, bricks_number, movables, movables_number, score, max_level, memerio);
             }
             break;
         }
@@ -291,7 +289,7 @@ void vert_move_object(TObject *obj, TObject* &bricks, TObject* &movables,
 }
 
 void horizon_move_object(TObject *obj, TObject* &bricks, TObject* &movables, 
-    int &bricks_number, int &movables_number, int &score, int &level, int &max_level) {
+    int &bricks_number, int &movables_number, int &score, int &level, int &max_level, TObject &memerio) {
     obj[0].x += obj[0].horiz_speed;
 
     for(int i = 0; i < bricks_number; i++) {
@@ -304,7 +302,7 @@ void horizon_move_object(TObject *obj, TObject* &bricks, TObject* &movables,
     }
     if(obj[0].c_type == 'o') { 
         TObject temp = *obj;
-        vert_move_object(&temp, bricks, movables, bricks_number, movables_number, score, level, max_level);
+        vert_move_object(&temp, bricks, movables, bricks_number, movables_number, score, level, max_level, memerio);
         if(temp.in_air == true) {
             obj[0].x -= obj[0].horiz_speed;
             obj[0].horiz_speed = -obj[0].horiz_speed;
@@ -312,7 +310,8 @@ void horizon_move_object(TObject *obj, TObject* &bricks, TObject* &movables,
     }
 }
 
-void horizontal_move_map(float dx, TObject* &bricks, TObject* &movables, int bricks_number, int movables_number) {
+void horizontal_move_map(float dx, TObject* &bricks, TObject* &movables, 
+    int bricks_number, int movables_number, TObject &memerio) {
     memerio.x -= dx;
     for(int i = 0; i < bricks_number; i++) {
         if(is_collision(memerio, bricks[i])) {
