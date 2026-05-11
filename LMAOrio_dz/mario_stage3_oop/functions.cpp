@@ -1,7 +1,7 @@
 #include "functions.hpp"
 #include "obj_types.hpp"
 
-void clear_map(char map[MAP_HEIGHT][MAP_WIDTH + 1]) {
+void Map::clear_map() {
     for (int j = 0; j < MAP_HEIGHT; j++) {
         for (int i = 0; i < MAP_WIDTH; i++) {   
             map[j][i] = ' ';
@@ -10,13 +10,13 @@ void clear_map(char map[MAP_HEIGHT][MAP_WIDTH + 1]) {
     }
 }
 
-void show_map(char map[MAP_HEIGHT][MAP_WIDTH + 1]) {
+void Map::show_map() {
     for (int j = 0; j < MAP_HEIGHT; j++) {
         std::cout << map[j];
     }
 }
 
-void display_score(int score, char map[MAP_HEIGHT][MAP_WIDTH + 1]) {
+void Map::display_score(int score) {
     char c[30];
     sprintf(c, "SCORE: %d", score);
     int len = strlen(c);
@@ -327,7 +327,7 @@ void horizontal_move_map(float dx, TObject* &bricks, TObject* &movables,
         movables[i].x += dx;
 }
 
-void put_object_on_map(TObject obj, char map[MAP_HEIGHT][MAP_WIDTH + 1]) {
+void Map::put_object_on_map(TObject obj) {
     int ix = static_cast<int>(round(obj.x));
     int iy = static_cast<int>(round(obj.y));
     int i_width = static_cast<int>(round(obj.width));
