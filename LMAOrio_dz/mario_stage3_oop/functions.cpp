@@ -32,8 +32,7 @@ void Map::set_cursor(int x, int y) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void create_level(int level, Object* &bricks, int &bricks_number, 
-    Object* &movables, int &movables_number, int &score, int &max_level, Object &memerio) {
+void Game::create_level() {
     system("color 1F");
 
     delete[] bricks;
@@ -44,10 +43,10 @@ void create_level(int level, Object* &bricks, int &bricks_number,
     movables = nullptr;
     movables_number = 0;
 
-    memerio.init_object(39, 10, 3, 3, '@');
+    memerio.init_object(39, 10, 3, 3, obj_types::player);
     score = 0;
 
-    if (level == 1)
+    if (current_level == 1)
     {
         (get_new_object(bricks, bricks_number))->init_object( 0, 21, 207, 4, obj_types::brick);
 
@@ -168,7 +167,7 @@ void create_level(int level, Object* &bricks, int &bricks_number,
 
     }
 
-    if(level == 2) {
+    if(current_level == 2) {
         (get_new_object(bricks, bricks_number))->init_object( 20, 20, 40, 5, obj_types::brick);
             (get_new_object(bricks, bricks_number))->init_object( 30, 10, 5, 3, obj_types::question_brick);
             (get_new_object(bricks, bricks_number))->init_object( 50, 10, 5, 3, obj_types::question_brick);
@@ -186,7 +185,7 @@ void create_level(int level, Object* &bricks, int &bricks_number,
         (get_new_object(movables, movables_number))->init_object( 25, 10, 3, 2, obj_types::enemy);
         (get_new_object(movables, movables_number))->init_object( 80, 10, 3, 2, obj_types::enemy);
     }
-    if(level == 3) {
+    if(current_level == 3) {
         (get_new_object(bricks, bricks_number))->init_object( 20, 20, 40, 5, obj_types::brick);
         (get_new_object(bricks, bricks_number))->init_object( 60, 15, 10, 10, obj_types::brick);
         (get_new_object(bricks, bricks_number))->init_object( 80, 20, 20, 5, obj_types::brick);
@@ -202,7 +201,7 @@ void create_level(int level, Object* &bricks, int &bricks_number,
         (get_new_object(movables, movables_number))->init_object( 175, 10, 3, 2, obj_types::enemy);
 
     }
-    if(level == 4) {
+    if(current_level == 4) {
         (get_new_object(bricks, bricks_number))->init_object( 20, 20, 40, 5, obj_types::brick);
         (get_new_object(bricks, bricks_number))->init_object( 80, 20, 15, 5, obj_types::brick);
         (get_new_object(bricks, bricks_number))->init_object( 120, 15, 15, 10, obj_types::brick);
@@ -215,13 +214,10 @@ void create_level(int level, Object* &bricks, int &bricks_number,
         (get_new_object(movables, movables_number))->init_object( 120, 10, 3, 2, obj_types::enemy);
         (get_new_object(movables, movables_number))->init_object( 130, 10, 3, 2, obj_types::enemy);
     }
-    
-    max_level = 3;
 }
 
 
-void player_collision(Object* &movables, int &movables_number, 
-    int &bricks_number, Object* &bricks, int &score, int &level, int &max_level, Object &memerio) {
+void Game::player_collision() {
     for(int i = 0; i < movables_number; i++) {
         if(is_collision(memerio, movables[i])) {
             if(movables[i].get_object_type() == obj_types::enemy) {
@@ -233,7 +229,7 @@ void player_collision(Object* &movables, int &movables_number,
                         score += 50;
                         continue;
                     } else 
-                        player_died(level, bricks, bricks_number, movables, movables_number, score, max_level, memerio);
+                        player_died();
             }
 
             if(movables[i].get_object_type() == obj_types::money) {
@@ -246,15 +242,13 @@ void player_collision(Object* &movables, int &movables_number,
     }
 }
 
-void player_died(int level, Object* &bricks, int &bricks_number, 
-    Object* &movables, int &movables_number, int &score, int &max_level, Object &memerio) {
+void Game::player_died() {
     system("color 4F");
     Sleep(500);
-    create_level(level, bricks, bricks_number, movables, movables_number, score, max_level, memerio);
+    create_level();
 }
 
-void vert_move_object(Object *obj, Object* &bricks, Object* &movables, 
-    int &bricks_number, int &movables_number, int &score, int &level, int &max_level, Object &memerio) {
+void Game::vert_move_object(Object *obj) {
     obj->set_air_state(true);
     obj->change_vertical_speed(0.05);
     obj->set_object_pos(obj->get_coordinates().first, obj->get_coordinates().second + obj->get_vert_horiz_speeds().first);
@@ -274,23 +268,22 @@ void vert_move_object(Object *obj, Object* &bricks, Object* &movables,
             obj->change_vertical_speed(0);
 
             if(bricks[i].get_object_type() == obj_types::win_zone) {
-                level++;
-                if(level > max_level) {
+                current_level++;
+                if(current_level > max_level) {
                     printf("w w w w w w w wwin win win w w w w w");
-                    level = 1;
+                    current_level = 1;
                 } 
                 system("color 2F");
                 Sleep(1000);
 
-                create_level(level, bricks, bricks_number, movables, movables_number, score, max_level, memerio);
+                create_level();
             }
             break;
         }
     }
 }
 
-void horizon_move_object(Object *obj, Object* &bricks, Object* &movables, 
-    int &bricks_number, int &movables_number, int &score, int &level, int &max_level, Object &memerio) {
+void Game::horizon_move_object(Object *obj) {
     obj->move_horizontal(obj->get_vert_horiz_speeds().second);
 
     for(int i = 0; i < bricks_number; i++) {
@@ -303,7 +296,7 @@ void horizon_move_object(Object *obj, Object* &bricks, Object* &movables,
     }
     if(obj->get_object_type() == obj_types::enemy) { 
         Object temp = *obj;
-        vert_move_object(&temp, bricks, movables, bricks_number, movables_number, score, level, max_level, memerio);
+        vert_move_object(&temp);
         if(temp.in_air_state() == true) {
             obj->move_horizontal(-obj->get_vert_horiz_speeds().second);
             obj->set_horiz_speed(-obj->get_vert_horiz_speeds().second);
@@ -311,8 +304,7 @@ void horizon_move_object(Object *obj, Object* &bricks, Object* &movables,
     }
 }
 
-void horizontal_move_map(float dx, Object* &bricks, Object* &movables, 
-    int bricks_number, int movables_number, Object &memerio) {
+void Game::horizontal_move_map(float dx) {
     memerio.move_horizontal(-dx);
     for(int i = 0; i < bricks_number; i++) {
         if(is_collision(memerio, bricks[i])) {
@@ -349,7 +341,7 @@ bool Map::is_pos_in_map(int x, int y) {
     return (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT);
 }
 
-bool is_collision(Object obj1, Object obj2) {
+bool Game::is_collision(Object obj1, Object obj2) {
     return (obj1.get_coordinates().first + obj1.get_height_width().second > obj2.get_coordinates().first 
     && obj1.get_coordinates().first < obj2.get_coordinates().first + obj2.get_height_width().second 
     && obj1.get_coordinates().second + obj1.get_height_width().first > obj2.get_coordinates().second 
@@ -381,7 +373,7 @@ void Object::set_object_pos(float x_pos, float y_pos) {
 }
 
 
-Object *get_new_object(Object* &obj_arr, int &obj_number) {
+Object *Game::get_new_object(Object* &obj_arr, int &obj_number) {
     obj_number++;
     Object *temp_arr = new Object[obj_number];
     for(int i = 0; i < obj_number-1; i++) {
@@ -392,7 +384,7 @@ Object *get_new_object(Object* &obj_arr, int &obj_number) {
     return &obj_arr[obj_number-1];
 }
 
-void delete_obj(Object* &obj_arr, int &obj_number, int i) {
+void Game::delete_obj(Object* &obj_arr, int &obj_number, int i) {
     obj_number--;
     obj_arr[i] = obj_arr[obj_number];
     Object *temp_arr = new Object[obj_number];
@@ -460,4 +452,42 @@ void Object::set_vert_speed(float vy) {
 
 void Object::set_horiz_speed(float vx) {
     horiz_speed = vx;
+}
+
+void Game::run_game_loop() {
+    do  {
+        map.clear_map();
+
+        if(memerio.in_air_state() == false && GetKeyState(VK_UP) < 0) memerio.set_vert_speed(-1.0);
+        if(GetKeyState(VK_LEFT) < 0) horizontal_move_map(1);
+        if(GetKeyState(VK_RIGHT) < 0) horizontal_move_map(-1);
+
+        if(memerio.get_coordinates().second > MAP_HEIGHT) player_died();
+
+        vert_move_object(&memerio);
+        player_collision();
+
+        for(int i = 0; i < bricks_number; i++) {
+            map.put_object_on_map(bricks[i]);
+        }
+        for(int i = 0; i < movables_number; i++) {
+            vert_move_object(movables + i);
+            horizon_move_object(movables + i);
+            if(movables[i].get_coordinates().second > MAP_HEIGHT) {
+                delete_obj(movables, movables_number, i);
+                i--;
+                continue;
+            }
+            map.put_object_on_map(movables[i]);
+        }
+
+        map.put_object_on_map(memerio);
+        map.display_score(score);
+
+
+        map.set_cursor(0, 0);
+        map.show_map();
+
+        Sleep(10);
+    } while(GetKeyState(VK_ESCAPE) >= 0);
 }
