@@ -1,36 +1,134 @@
-#include "functions.hpp"
+#include "game_logic.hpp"
 #include "obj_types.hpp"
 
-void Map::clear_map() {
-    for (int j = 0; j < MAP_HEIGHT; j++) {
-        for (int i = 0; i < MAP_WIDTH; i++) {   
-            map[j][i] = ' ';
+Object *Game::get_new_object(Object* &obj_arr, int &obj_number) {
+    obj_number++;
+    Object *temp_arr = new Object[obj_number];
+    for(int i = 0; i < obj_number-1; i++) {
+        temp_arr[i] = obj_arr[i];
+    }
+    delete[] obj_arr;
+    obj_arr = temp_arr;
+    return &obj_arr[obj_number-1];
+}
+
+void Game::delete_obj(Object* &obj_arr, int &obj_number, int i) {
+    obj_number--;
+    obj_arr[i] = obj_arr[obj_number];
+    Object *temp_arr = new Object[obj_number];
+    for(int i = 0; i < obj_number; i++) {
+        temp_arr[i] = obj_arr[i];
+    }
+    delete[] obj_arr;
+    obj_arr = temp_arr;
+}
+//-------
+
+bool Game::is_collision(Object obj1, Object obj2) {
+    return (obj1.get_coordinates().first + obj1.get_height_width().second > obj2.get_coordinates().first 
+    && obj1.get_coordinates().first < obj2.get_coordinates().first + obj2.get_height_width().second 
+    && obj1.get_coordinates().second + obj1.get_height_width().first > obj2.get_coordinates().second 
+    && obj1.get_coordinates().second < obj2.get_coordinates().second + obj2.get_height_width().first); 
+}
+
+void Game::player_collision() {
+    for(int i = 0; i < movables_number; i++) {
+        if(is_collision(memerio, movables[i])) {
+            if(movables[i].get_object_type() == obj_types::enemy) {
+                if(memerio.in_air_state() == true && memerio.get_vert_horiz_speeds().first > 0 
+                    && memerio.get_coordinates().second + memerio.get_height_width().first 
+                    < movables[i].get_coordinates().second + movables[i].get_height_width().first * 0.5) {
+                        delete_obj(movables, movables_number, i);
+                        i--;
+                        score += 50;
+                        continue;
+                    } else 
+                        player_died();
+            }
+
+            if(movables[i].get_object_type() == obj_types::money) {
+                delete_obj(movables, movables_number, i);
+                i--;
+                score += 100;
+                continue;
+            }
         }
-        map[j][MAP_WIDTH] = '\0';
+    }
+}
+//-------
+
+void Game::horizon_move_object(Object *obj) {
+    obj->move_horizontal(obj->get_vert_horiz_speeds().second);
+
+    for(int i = 0; i < bricks_number; i++) {
+        if(is_collision(obj[0], bricks[i])) {
+            obj->move_horizontal(-obj->get_vert_horiz_speeds().second);
+            obj->set_horiz_speed(-obj->get_vert_horiz_speeds().second);
+            return;
+        }
+
+    }
+    if(obj->get_object_type() == obj_types::enemy) { 
+        Object temp = *obj;
+        vert_move_object(&temp);
+        if(temp.in_air_state() == true) {
+            obj->move_horizontal(-obj->get_vert_horiz_speeds().second);
+            obj->set_horiz_speed(-obj->get_vert_horiz_speeds().second);
+        }
     }
 }
 
-void Map::show_map() {
-    for (int j = 0; j < MAP_HEIGHT; j++) {
-        std::cout << map[j];
+void Game::vert_move_object(Object *obj) {
+    obj->set_air_state(true);
+    obj->change_vertical_speed(0.05);
+    obj->set_object_pos(obj->get_coordinates().first, obj->get_coordinates().second + obj->get_vert_horiz_speeds().first);
+
+    for(int i = 0; i < bricks_number; i++ ) {    
+        if(is_collision(*obj, bricks[i] ) ) {
+            if(obj->get_vert_horiz_speeds().first > 0)
+                obj->set_air_state(false);
+
+            if(bricks[i].get_object_type() == obj_types::question_brick && obj->get_vert_horiz_speeds().first < 0 && obj == &memerio) {
+                bricks[i].set_object_type(obj_types::empty_brick);
+                (get_new_object(movables, movables_number))->init_object( bricks[i].get_coordinates().first, bricks[i].get_coordinates().second-3, 3, 2, obj_types::money);
+                movables[movables_number - 1].set_vert_speed(-0.7);
+            }
+
+            obj->set_object_pos(obj->get_coordinates().first, obj->get_coordinates().second - obj->get_vert_horiz_speeds().first);
+            obj->change_vertical_speed(0);
+
+            if(bricks[i].get_object_type() == obj_types::win_zone) {
+                current_level++;
+                if(current_level > max_level) {
+                    printf("w w w w w w w wwin win win w w w w w");
+                    current_level = 1;
+                } 
+                system("color 2F");
+                Sleep(1000);
+
+                create_level();
+            }
+            break;
+        }
     }
 }
 
-void Map::display_score(int score) {
-    char c[30];
-    sprintf(c, "SCORE: %d", score);
-    int len = strlen(c);
-    for(int i = 0; i < len; i++) {
-        map[1][i+5] = c[i];
+void Game::horizontal_move_map(float dx) {
+    memerio.move_horizontal(-dx);
+    for(int i = 0; i < bricks_number; i++) {
+        if(is_collision(memerio, bricks[i])) {
+            memerio.move_horizontal(dx);
+            return;
+        }
     }
-}
+    memerio.move_horizontal(dx);
 
-void Map::set_cursor(int x, int y) {
-    COORD coord;
-    coord.X = x;
-    coord.Y = y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+    for(int i = 0; i < bricks_number; i++) 
+        bricks[i].move_horizontal(dx);
+    for(int i = 0; i < movables_number; i++)
+        movables[i].move_horizontal(dx);
 }
+//----------
 
 void Game::create_level() {
     system("color 1F");
@@ -215,244 +313,14 @@ void Game::create_level() {
         (get_new_object(movables, movables_number))->init_object( 130, 10, 3, 2, obj_types::enemy);
     }
 }
-
-
-void Game::player_collision() {
-    for(int i = 0; i < movables_number; i++) {
-        if(is_collision(memerio, movables[i])) {
-            if(movables[i].get_object_type() == obj_types::enemy) {
-                if(memerio.in_air_state() == true && memerio.get_vert_horiz_speeds().first > 0 
-                    && memerio.get_coordinates().second + memerio.get_height_width().first 
-                    < movables[i].get_coordinates().second + movables[i].get_height_width().first * 0.5) {
-                        delete_obj(movables, movables_number, i);
-                        i--;
-                        score += 50;
-                        continue;
-                    } else 
-                        player_died();
-            }
-
-            if(movables[i].get_object_type() == obj_types::money) {
-                delete_obj(movables, movables_number, i);
-                i--;
-                score += 100;
-                continue;
-            }
-        }
-    }
-}
+//------------
 
 void Game::player_died() {
     system("color 4F");
     Sleep(500);
     create_level();
 }
-
-void Game::vert_move_object(Object *obj) {
-    obj->set_air_state(true);
-    obj->change_vertical_speed(0.05);
-    obj->set_object_pos(obj->get_coordinates().first, obj->get_coordinates().second + obj->get_vert_horiz_speeds().first);
-
-    for(int i = 0; i < bricks_number; i++ ) {    
-        if(is_collision(*obj, bricks[i] ) ) {
-            if(obj->get_vert_horiz_speeds().first > 0)
-                obj->set_air_state(false);
-
-            if(bricks[i].get_object_type() == obj_types::question_brick && obj->get_vert_horiz_speeds().first < 0 && obj == &memerio) {
-                bricks[i].set_object_type(obj_types::empty_brick);
-                (get_new_object(movables, movables_number))->init_object( bricks[i].get_coordinates().first, bricks[i].get_coordinates().second-3, 3, 2, obj_types::money);
-                movables[movables_number - 1].set_vert_speed(-0.7);
-            }
-
-            obj->set_object_pos(obj->get_coordinates().first, obj->get_coordinates().second - obj->get_vert_horiz_speeds().first);
-            obj->change_vertical_speed(0);
-
-            if(bricks[i].get_object_type() == obj_types::win_zone) {
-                current_level++;
-                if(current_level > max_level) {
-                    printf("w w w w w w w wwin win win w w w w w");
-                    current_level = 1;
-                } 
-                system("color 2F");
-                Sleep(1000);
-
-                create_level();
-            }
-            break;
-        }
-    }
-}
-
-void Game::horizon_move_object(Object *obj) {
-    obj->move_horizontal(obj->get_vert_horiz_speeds().second);
-
-    for(int i = 0; i < bricks_number; i++) {
-        if(is_collision(obj[0], bricks[i])) {
-            obj->move_horizontal(-obj->get_vert_horiz_speeds().second);
-            obj->set_horiz_speed(-obj->get_vert_horiz_speeds().second);
-            return;
-        }
-
-    }
-    if(obj->get_object_type() == obj_types::enemy) { 
-        Object temp = *obj;
-        vert_move_object(&temp);
-        if(temp.in_air_state() == true) {
-            obj->move_horizontal(-obj->get_vert_horiz_speeds().second);
-            obj->set_horiz_speed(-obj->get_vert_horiz_speeds().second);
-        }
-    }
-}
-
-void Game::horizontal_move_map(float dx) {
-    memerio.move_horizontal(-dx);
-    for(int i = 0; i < bricks_number; i++) {
-        if(is_collision(memerio, bricks[i])) {
-            memerio.move_horizontal(dx);
-            return;
-        }
-    }
-    memerio.move_horizontal(dx);
-
-    for(int i = 0; i < bricks_number; i++) 
-        bricks[i].move_horizontal(dx);
-    for(int i = 0; i < movables_number; i++)
-        movables[i].move_horizontal(dx);
-}
-
-void Map::put_object_on_map(Object obj) {
-    int ix = static_cast<int>(round(obj.get_coordinates().first));
-    int iy = static_cast<int>(round(obj.get_coordinates().second));
-    int i_width = static_cast<int>(round(obj.get_height_width().second));
-    int i_height = static_cast<int>(round(obj.get_height_width().first));
-
-    for(int i = ix; i < (ix + i_width); i++) 
-        for(int j = iy; j < (iy + i_height); j++)
-            if(is_pos_in_map(i, j))
-                map[j][i] = obj.get_object_type();
-}
-
-// void set_object_pos(Object *obj, float x_pos, float y_pos) {
-//     obj->x = x_pos;
-//     obj->y = y_pos;
-// }
-
-bool Map::is_pos_in_map(int x, int y) {
-    return (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT);
-}
-
-bool Game::is_collision(Object obj1, Object obj2) {
-    return (obj1.get_coordinates().first + obj1.get_height_width().second > obj2.get_coordinates().first 
-    && obj1.get_coordinates().first < obj2.get_coordinates().first + obj2.get_height_width().second 
-    && obj1.get_coordinates().second + obj1.get_height_width().first > obj2.get_coordinates().second 
-    && obj1.get_coordinates().second < obj2.get_coordinates().second + obj2.get_height_width().first); 
-}
-
-
-// void init_object(Object *obj, float x_pos, float y_pos, float o_width, float o_height, char obj_type) {
-//     set_object_pos(obj, x_pos, y_pos);
-//     obj->width = o_width;
-//     obj->height = o_height;
-//     obj->vert_speed = 0;
-//     obj->object_type = obj_type;
-//     obj->horiz_speed = 0.2;
-// }
-
-void Object::init_object(float x_pos, float y_pos, float o_width, float o_height, char obj_type) {
-    set_object_pos(x_pos, y_pos);
-    width = o_width;
-    height = o_height;
-    vert_speed = 0;
-    object_type = obj_type;
-    horiz_speed = 0.2;
-}
-
-void Object::set_object_pos(float x_pos, float y_pos) {
-    x = x_pos;
-    y = y_pos;
-}
-
-
-Object *Game::get_new_object(Object* &obj_arr, int &obj_number) {
-    obj_number++;
-    Object *temp_arr = new Object[obj_number];
-    for(int i = 0; i < obj_number-1; i++) {
-        temp_arr[i] = obj_arr[i];
-    }
-    delete[] obj_arr;
-    obj_arr = temp_arr;
-    return &obj_arr[obj_number-1];
-}
-
-void Game::delete_obj(Object* &obj_arr, int &obj_number, int i) {
-    obj_number--;
-    obj_arr[i] = obj_arr[obj_number];
-    Object *temp_arr = new Object[obj_number];
-    for(int i = 0; i < obj_number; i++) {
-        temp_arr[i] = obj_arr[i];
-    }
-    delete[] obj_arr;
-    obj_arr = temp_arr;
-}
-
-void Object::set_air_state(bool state) {
-    in_air = state;
-}
-
-bool Object::in_air_state() {
-    return in_air;
-}
-
-std::pair<float, float> Object::get_coordinates() {
-    return {x, y};
-}
-
-char Object::get_object_type() {
-    return object_type;
-}
-
-std::pair<float, float> Object::get_height_width() {
-    return {height, width};
-}
-
-void Object::change_vertical_speed(float dy) {
-    if(dy == 0)
-        vert_speed = 0;
-    else
-        vert_speed += dy;
-
-}
-
-void Object::change_horizontal_speed(float dx) {
-    if(dx == 0)
-        horiz_speed = 0;
-    else
-        horiz_speed += dx;
-}
-
-void Object::set_object_type(char new_type) {
-    object_type = new_type;
-}
-
-void Object::move_horizontal(float dx) {
-    x += dx;
-}
-
-void Object::move_vertical(float dy) {
-    y += dy;
-}
-
-std::pair<float, float> Object::get_vert_horiz_speeds() {
-    return {vert_speed, horiz_speed};
-}
-
-void Object::set_vert_speed(float vy) {
-    vert_speed = vy;
-}
-
-void Object::set_horiz_speed(float vx) {
-    horiz_speed = vx;
-}
+//------------
 
 void Game::run_game_loop() {
     do  {

@@ -1,5 +1,6 @@
-#include "functions.hpp"
-#include "obj_types.hpp"
+#include "game_logic.hpp"
+#include "map_and_displays.hpp"
+#include "objects.hpp"
 
 int main() {
     Game game;
