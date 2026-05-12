@@ -12,12 +12,34 @@ int *fuc(int * &obj_arr, int &obj_number) {
     return &obj_arr[obj_number-1];
 }
 
+void change_speed(int &speed, int dx) {
+    speed += dx;
+}
+
+class temp {
+    private:
+        int x;
+        int y;
+    public:
+        void set_coordinates(int x_pos, int y_pos) {
+            x = x_pos;
+            y = y_pos;
+        }
+
+        // void set_coordinates(int x_pos = x, int y_pos = y) {
+        //     x = x_pos;
+        //     y = y_pos;
+        // }
+
+        void show_coordinates() {
+            cout << x << " " << y << endl;
+        }
+};
+
 int main() {
-    int num = 2;
-    int *a = new int[num];
-    a[0] = 2;
-    a[1] = 4;
-    fuc(a, num);
-    //a[2] = 7;
-    cout << a[0] << a[1] << a[2] << a[3];
+    temp t;
+    t.set_coordinates(5, 10);
+    t.show_coordinates();
+    t.set_coordinates(6, 20);
+    t.show_coordinates();
 }
