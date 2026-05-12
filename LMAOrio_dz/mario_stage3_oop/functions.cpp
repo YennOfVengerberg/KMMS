@@ -267,7 +267,7 @@ void vert_move_object(Object *obj, Object* &bricks, Object* &movables,
             if(bricks[i].get_object_type() == obj_types::question_brick && obj->get_vert_horiz_speeds().first < 0 && obj == &memerio) {
                 bricks[i].set_object_type(obj_types::empty_brick);
                 (get_new_object(movables, movables_number))->init_object( bricks[i].get_coordinates().first, bricks[i].get_coordinates().second-3, 3, 2, obj_types::money);
-                movables[movables_number - 1].change_vertical_speed(-0.7);
+                movables[movables_number - 1].set_vert_speed(-0.7);
             }
 
             obj->set_object_pos(obj->get_coordinates().first, obj->get_coordinates().second - obj->get_vert_horiz_speeds().first);
@@ -296,7 +296,7 @@ void horizon_move_object(Object *obj, Object* &bricks, Object* &movables,
     for(int i = 0; i < bricks_number; i++) {
         if(is_collision(obj[0], bricks[i])) {
             obj->move_horizontal(-obj->get_vert_horiz_speeds().second);
-            obj->change_horizontal_speed(-obj->get_vert_horiz_speeds().second);
+            obj->set_horiz_speed(-obj->get_vert_horiz_speeds().second);
             return;
         }
 
@@ -306,26 +306,26 @@ void horizon_move_object(Object *obj, Object* &bricks, Object* &movables,
         vert_move_object(&temp, bricks, movables, bricks_number, movables_number, score, level, max_level, memerio);
         if(temp.in_air_state() == true) {
             obj->move_horizontal(-obj->get_vert_horiz_speeds().second);
-            obj->change_horizontal_speed(-2 * obj->get_vert_horiz_speeds().second);
+            obj->set_horiz_speed(-obj->get_vert_horiz_speeds().second);
         }
     }
 }
 
 void horizontal_move_map(float dx, Object* &bricks, Object* &movables, 
     int bricks_number, int movables_number, Object &memerio) {
-    memerio.change_horizontal_speed(-dx);
+    memerio.move_horizontal(-dx);
     for(int i = 0; i < bricks_number; i++) {
         if(is_collision(memerio, bricks[i])) {
-            memerio.change_horizontal_speed(dx);
+            memerio.move_horizontal(dx);
             return;
         }
     }
-    memerio.change_horizontal_speed(dx);
+    memerio.move_horizontal(dx);
 
     for(int i = 0; i < bricks_number; i++) 
-        bricks[i].change_horizontal_speed(dx);
+        bricks[i].move_horizontal(dx);
     for(int i = 0; i < movables_number; i++)
-        movables[i].change_horizontal_speed(dx);
+        movables[i].move_horizontal(dx);
 }
 
 void Map::put_object_on_map(Object obj) {
@@ -411,7 +411,7 @@ bool Object::in_air_state() {
     return in_air;
 }
 
-std::pair<int, int> Object::get_coordinates() {
+std::pair<float, float> Object::get_coordinates() {
     return {x, y};
 }
 
@@ -452,4 +452,12 @@ void Object::move_vertical(float dy) {
 
 std::pair<float, float> Object::get_vert_horiz_speeds() {
     return {vert_speed, horiz_speed};
+}
+
+void Object::set_vert_speed(float vy) {
+    vert_speed = vy;
+}
+
+void Object::set_horiz_speed(float vx) {
+    horiz_speed = vx;
 }

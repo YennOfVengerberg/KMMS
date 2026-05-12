@@ -38,7 +38,7 @@ class Object {
         void set_air_state(bool state);
 
         bool in_air_state();
-        std::pair<int, int> get_coordinates();
+        std::pair<float, float> get_coordinates();
         std::pair<float, float> get_height_width();
 
         char get_object_type();
@@ -52,6 +52,9 @@ class Object {
         void set_object_type(char new_type);
 
         std::pair<float, float> get_vert_horiz_speeds();
+
+        void set_vert_speed(float vy);
+        void set_horiz_speed(float vx);
 };
 
 class Map {

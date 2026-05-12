@@ -22,7 +22,7 @@ int main() {
     do  {
         map.clear_map();
 
-        if(memerio.in_air_state() == false && GetKeyState(VK_UP) < 0) memerio.change_vertical_speed(-2 * 1.0);
+        if(memerio.in_air_state() == false && GetKeyState(VK_UP) < 0) memerio.set_vert_speed(-1.0);
         if(GetKeyState(VK_LEFT) < 0) horizontal_move_map(1, bricks, movables, bricks_number, movables_number, memerio);
         if(GetKeyState(VK_RIGHT) < 0) horizontal_move_map(-1, bricks, movables, bricks_number, movables_number, memerio);
 
