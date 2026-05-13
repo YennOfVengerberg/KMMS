@@ -39,8 +39,4 @@ class Game {
 
 };
 
-
-//inits
-
-
 #endif

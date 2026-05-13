@@ -15,25 +15,25 @@ void Object::init_object(float x_pos, float y_pos, float o_width, float o_height
 }
 // ----------
 
-bool Object::in_air_state() {
+bool Object::in_air_state() const {
     return in_air;
 }
 // ---------
 
-char Object::get_object_type() {
+char Object::get_object_type() const {
     return object_type;
 }
 // ---------
 
-std::pair<float, float> Object::get_coordinates() {
+std::pair<float, float> Object::get_coordinates() const {
     return {x, y};
 }
 
-std::pair<float, float> Object::get_height_width() {
+std::pair<float, float> Object::get_height_width() const {
     return {height, width};
 }
 
-std::pair<float, float> Object::get_vert_horiz_speeds() {
+std::pair<float, float> Object::get_vert_horiz_speeds() const {
     return {vert_speed, horiz_speed};
 }
 // ---------

@@ -16,13 +16,13 @@ class Object {
         void init_object(float x_pos, float y_pos, float o_width, float o_height, char obj_type);
     
     public:
-        bool in_air_state();
+        bool in_air_state() const;
         
-        char get_object_type();
+        char get_object_type() const;
 
-        std::pair<float, float> get_coordinates();
-        std::pair<float, float> get_height_width();
-        std::pair<float, float> get_vert_horiz_speeds();
+        std::pair<float, float> get_coordinates() const;
+        std::pair<float, float> get_height_width() const;
+        std::pair<float, float> get_vert_horiz_speeds() const;
 
         void change_horizontal_speed(float dx);
         void change_vertical_speed(float dy);
