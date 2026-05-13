@@ -83,7 +83,8 @@ void Game::horizon_move_object(Object *obj) {
 void Game::vert_move_object(Object *obj) {
     obj->set_air_state(true);
     obj->change_vertical_speed(0.05);
-    obj->set_object_pos(obj->get_coordinates().first, obj->get_coordinates().second + obj->get_vert_horiz_speeds().first);
+    obj->set_object_pos(obj->get_coordinates().first, 
+        obj->get_coordinates().second + obj->get_vert_horiz_speeds().first);
 
     for(int i = 0; i < bricks_number; i++ ) {    
         if(is_collision(*obj, bricks[i] ) ) {
@@ -92,7 +93,8 @@ void Game::vert_move_object(Object *obj) {
 
             if(bricks[i].get_object_type() == obj_types::question_brick && obj->get_vert_horiz_speeds().first < 0 && obj == &memerio) {
                 bricks[i].set_object_type(obj_types::empty_brick);
-                (get_new_object(movables, movables_number))->init_object( bricks[i].get_coordinates().first, bricks[i].get_coordinates().second-3, 3, 2, obj_types::money);
+                (get_new_object(movables, movables_number))->
+                    init_object(bricks[i].get_coordinates().first, bricks[i].get_coordinates().second-3, 3, 2, obj_types::money);
                 movables[movables_number - 1].set_vert_speed(-0.7);
             }
 
