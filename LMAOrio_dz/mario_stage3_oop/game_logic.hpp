@@ -17,6 +17,8 @@ class Game {
         int movables_number;
 
         int score;
+        int level_score;
+
         int current_level = 1;
         int max_level = 4;
 

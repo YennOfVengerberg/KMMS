@@ -40,6 +40,7 @@ void Game::player_collision() {
                     < movables[i].get_coordinates().second + movables[i].get_height_width().first * 0.5) {
                         delete_obj(movables, movables_number, i);
                         i--;
+                        level_score += 50;
                         score += 50;
                         continue;
                     } else 
@@ -49,6 +50,7 @@ void Game::player_collision() {
             if(movables[i].get_object_type() == obj_types::money) {
                 delete_obj(movables, movables_number, i);
                 i--;
+                level_score += 100;
                 score += 100;
                 continue;
             }
@@ -100,7 +102,7 @@ void Game::vert_move_object(Object *obj) {
             if(bricks[i].get_object_type() == obj_types::win_zone) {
                 current_level++;
                 if(current_level > max_level) {
-                    printf("w w w w w w w wwin win win w w w w w");
+                    std::cout << "w w w w w w w wwin win win w w w w w your score " << score;
                     current_level = 1;
                 } 
                 system("color 2F");
@@ -142,7 +144,7 @@ void Game::create_level() {
     movables_number = 0;
 
     memerio.init_object(39, 10, 3, 3, obj_types::player);
-    score = 0;
+    level_score = 0;
 
     if (current_level == 1)
     {
@@ -318,6 +320,7 @@ void Game::create_level() {
 void Game::player_died() {
     system("color 4F");
     Sleep(500);
+    score -= level_score;
     create_level();
 }
 //------------
