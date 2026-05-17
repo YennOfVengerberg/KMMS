@@ -35,10 +35,12 @@ void Map::set_cursor(int x, int y) {
 // -----------------
 
 void Map::put_object_on_map(Object obj) {
-    int ix = static_cast<int>(round(obj.get_coordinates().first));
-    int iy = static_cast<int>(round(obj.get_coordinates().second));
-    int i_width = static_cast<int>(round(obj.get_height_width().second));
-    int i_height = static_cast<int>(round(obj.get_height_width().first));
+    obj_dimensions obj_dims = obj.get_obj_dimensions();
+
+    int ix = static_cast<int>(round(obj_dims.x));
+    int iy = static_cast<int>(round(obj_dims.y));
+    int i_width = static_cast<int>(round(obj_dims.width));
+    int i_height = static_cast<int>(round(obj_dims.height));
 
     for(int i = ix; i < (ix + i_width); i++) 
         for(int j = iy; j < (iy + i_height); j++)

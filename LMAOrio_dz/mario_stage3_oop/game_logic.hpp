@@ -1,19 +1,27 @@
-#ifndef FUNCTIONS
-#define FUNCTIONS
+#ifndef GAME_LOGIC
+#define GAME_LOGIC
 
 #include "map_and_displays.hpp"
 #include "objects.hpp"
+
+// struct game_info {
+
+//     int score;
+//     int level_score;
+//     int current_level;
+//     int max_level;
+// };
 
 class Game {
     private:
         Map map;
     
-        Object memerio;
+        Movable mario;
 
-        Object *bricks = nullptr;
+        Brick *bricks = nullptr;
         int bricks_number;
 
-        Object *movables = nullptr;
+        Movable *movables = nullptr;
         int movables_number;
 
         int score;
@@ -23,14 +31,18 @@ class Game {
         int max_level = 4;
 
     public:
-        Object *get_new_object(Object* &obj_arr, int &obj_number);
-        void delete_obj(Object* &obj_arr, int &obj_number, int i);
+        template <typename T>
+        T *get_new_object(T* &obj_arr, int &obj_number);
+
+        template <typename T>
+        void delete_obj(T* &obj_arr, int &obj_number, int i);
+
 
         bool is_collision(Object obj1, Object obj2);
         void player_collision();
 
-        void horizon_move_object(Object *obj);
-        void vert_move_object(Object *obj);
+        void horizon_move_object(Movable *obj);
+        void vert_move_object(Movable *obj);
         void horizontal_move_map(float dx);
 
         void create_level();
