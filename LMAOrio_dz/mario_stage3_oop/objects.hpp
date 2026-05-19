@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include "obj_types.hpp"
+
 struct obj_dimensions {
     float x, y;
     float height, width;
@@ -55,9 +57,21 @@ class Movable : public Object {
         void set_vert_speed(float vy);  
 };
 
-// class Mario : Movables {
-//     private:
-// };
+class Mario : public Movable {
+    private:
+        char object_type = obj_types::player;
+};
 
+class Enemy : public Movable {
+    private:
+        char object_type = obj_types::enemy;
+};
+
+class Money : public Movable {
+    private:
+        char object_type = obj_types::money;
+
+        int value = 100;
+};
 
 #endif
