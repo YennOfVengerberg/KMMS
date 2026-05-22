@@ -14,9 +14,9 @@
 
 class Game {
     private:
-        Map map;
+        //Map map;
     
-        Movable mario;
+        Mario mario;
 
         Brick *bricks = nullptr;
         int bricks_number;
@@ -31,6 +31,7 @@ class Game {
         int max_level = 4;
 
     public:
+        Game(Mario *mario, Brick *bricks, int bricks_number, Movable *movables, int movables_number);
         template <typename T>
         T *get_new_object(T* &obj_arr, int &obj_number);
 
@@ -45,11 +46,13 @@ class Game {
         void vert_move_object(Movable *obj);
         void horizontal_move_map(float dx);
 
-        void create_level();
+        //void create_level();
         
-        void player_died();
+        //void player_died();
 
-        void run_game_loop();
+        //void run_game_loop();
+
+        int get_score() const;
 
 };
 
