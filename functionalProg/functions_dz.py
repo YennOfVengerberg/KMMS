@@ -10,7 +10,7 @@ students = [
 
 ### 1.1
 
-age_criteria = 18 ###int(input("input age criteria: "))
+age_criteria = 20 ###int(input("input age criteria: "))
 
 filtered = list(filter(lambda student_age: student_age["age"] > age_criteria, students))
 
