@@ -22,35 +22,48 @@ void Game::add_movable(Movable* obj) {
 	movable_objs.push_back(obj);
 }
 
+void Game::add_moving_collisionable(MovingCollisionable* obj) {
+	moving_collisionable_objs.push_back(obj);
+}
+
 void Game::add_static_obj(Rect* obj) {
 	static_objs.push_back(obj);
 }
 
 void Game::check_horizontally_static_collisions() noexcept {
-	for (Collisionable* obj: collisionable_objs) {
-		for (Rect* static_obj: static_objs) {
-			if (obj->has_collision(static_obj)) {
-				obj->process_horizontal_static_collision(static_obj);
-				break;
+	auto process_collisions = [this](auto& objects) {
+		for (auto* obj: objects) {
+			for (Rect* static_obj: static_objs) {
+				if (obj->has_collision(static_obj)) {
+					obj->process_horizontal_static_collision(static_obj);
+					break;
+				}
 			}
 		}
-	}
+	};
+	process_collisions(collisionable_objs);
+	process_collisions(moving_collisionable_objs);
 }
 
 void Game::check_mario_collision() {
-	for (int i = 0; i < collisionable_objs.size(); i++) {
-		Collisionable* obj = collisionable_objs[i];
-		if (obj->has_collision(mario)) {
-			obj->process_mario_collision(mario);
-			if (!mario->is_active()) {
-				break;
-			} else if (!obj->is_active()) {
-				// TODO
-				collisionable_objs[i] = collisionable_objs.back();
-				collisionable_objs.pop_back();
-				i--;
+	auto process_collisions = [this](auto& objects) {
+		for (int i = 0; i < objects.size(); i++) {
+			auto* obj = objects[i];
+			if (obj->has_collision(mario)) {
+				obj->process_mario_collision(mario);
+				if (!mario->is_active()) {
+					return;
+				} else if (!obj->is_active()) {
+					objects[i] = objects.back();
+					objects.pop_back();
+					i--;
+				}
 			}
 		}
+	};
+	process_collisions(collisionable_objs);
+	if (mario->is_active()) {
+		process_collisions(moving_collisionable_objs);
 	}
 }
 
@@ -68,14 +81,18 @@ void Game::check_vertically_static_collisions() noexcept {
 		is_level_end_ = true;
 	}
 	
-	for (Collisionable* obj: collisionable_objs) {
-		for (Rect* static_obj: static_objs) {
-			if (obj->has_collision(static_obj)) {
-				obj->process_vertical_static_collision(static_obj);
-				break;
+	auto process_collisions = [this](auto& objects) {
+		for (auto* obj: objects) {
+			for (Rect* static_obj: static_objs) {
+				if (obj->has_collision(static_obj)) {
+					obj->process_vertical_static_collision(static_obj);
+					break;
+				}
 			}
 		}
-	}
+	};
+	process_collisions(collisionable_objs);
+	process_collisions(moving_collisionable_objs);
 }
 
 void Game::finish() noexcept {
@@ -106,10 +123,16 @@ void Game::move_objs_horizontally() noexcept {
 	for (Movable* obj: movable_objs) {
 		obj->move_horizontally();
 	}
+	for (MovingCollisionable* obj: moving_collisionable_objs) {
+		obj->move_horizontally();
+	}
 }
 
 void Game::move_objs_vertically() noexcept {
 	for (Movable* obj: movable_objs) {
+		obj->move_vertically();
+	}
+	for (MovingCollisionable* obj: moving_collisionable_objs) {
 		obj->move_vertically();
 	}
 }
@@ -130,10 +153,15 @@ void Game::remove_movable(Movable* obj) {
 	remove_obj(movable_objs, obj);
 }
 
+void Game::remove_moving_collisionable(MovingCollisionable* obj) {
+	remove_obj(moving_collisionable_objs, obj);
+}
+
 void Game::remove_objs() {
 	collisionable_objs.clear();
 	map_movable_objs.clear();
 	movable_objs.clear();
+	moving_collisionable_objs.clear();
 	static_objs.clear();
 	remove_mario();
 }
@@ -158,3 +186,6 @@ void Game::remove_obj(std::vector<T*>& container, T* obj) {
 		container.end()
 	);
 }
+
+
+// сделать мины - буква m, лежат вместо верхнего края платформы, при столкновении с ними марио умирает

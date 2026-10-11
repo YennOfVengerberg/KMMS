@@ -7,7 +7,7 @@ using biv::MovingPlatform;
 MovingPlatform::MovingPlatform(
 	const Coord& top_left, const int width, const int height,
 	const int travel_distance
-) : Ship(top_left, width, height),
+ ) : RectMapMovableAdapter(top_left, width, height),
 	  left_limit(top_left.x),
 	  right_limit(top_left.x + (travel_distance > 0 ? travel_distance : 1)) {}
 
@@ -59,14 +59,14 @@ void MovingPlatform::move_horizontally() noexcept {
 void MovingPlatform::move_vertically() noexcept {}
 
 void MovingPlatform::move_map_left() noexcept {
-	Ship::move_map_left();
+	RectMapMovableAdapter::move_map_left();
 	left_limit -= MapMovable::MAP_STEP;
 	right_limit -= MapMovable::MAP_STEP;
 	hspeed = 0;
 }
 
 void MovingPlatform::move_map_right() noexcept {
-	Ship::move_map_right();
+	RectMapMovableAdapter::move_map_right();
 	left_limit += MapMovable::MAP_STEP;
 	right_limit += MapMovable::MAP_STEP;
 	hspeed = 0;

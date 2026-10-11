@@ -44,7 +44,7 @@ int main() {
 	using namespace std::chrono_literals;
 	
 	const int map_height = 30;
-	const int map_weight = 200;
+	const int map_weight = 120;
 	auto frame_delay = std::chrono::milliseconds(0);
 	
 	biv::OSControlSettings* control_settings = nullptr;

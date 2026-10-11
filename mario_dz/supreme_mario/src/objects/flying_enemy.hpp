@@ -3,7 +3,7 @@
 #include "enemy.hpp"
 
 namespace biv {
-	class FlyingEnemy : public Enemy {
+	class FlyingEnemy : public Enemy /* убрать класс enemy, разбить его на абстракции*/ {
 		private:
 			static constexpr float HORIZONTAL_RANGE = 8.0f;
 			static constexpr float VERTICAL_RANGE = 4.0f;

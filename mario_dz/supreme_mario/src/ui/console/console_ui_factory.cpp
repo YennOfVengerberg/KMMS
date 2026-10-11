@@ -110,8 +110,7 @@ void ConsoleUIFactory::create_moving_platform(
 	);
 	moving_platforms.push_back(platform);
 	game->add_map_movable(platform);
-	game->add_movable(platform);
-	game->add_collisionable(platform);
+	game->add_moving_collisionable(platform);
 	game->add_static_obj(platform);
 	game_map->add_obj(platform);
 }

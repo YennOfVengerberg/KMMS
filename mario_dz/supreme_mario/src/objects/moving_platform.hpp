@@ -1,12 +1,11 @@
 #pragma once
 
-#include "collisionable.hpp"
+#include "moving_collisionable.hpp"
 #include "mario.hpp"
-#include "movable.hpp"
-#include "ship.hpp"
+#include "rect_map_movable_adapter.hpp"
 
 namespace biv {
-	class MovingPlatform : public Ship, public Movable, public Collisionable {
+	class MovingPlatform : public RectMapMovableAdapter, public MovingCollisionable {
 		private:
 			static constexpr float MOVEMENT_SPEED = 0.1f;
 

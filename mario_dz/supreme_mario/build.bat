@@ -18,6 +18,6 @@ set GAME_TYPE=WindowsConsole
 
 cmake -G %BUILD_TYPE% -DGAME_TYPE=%GAME_TYPE% ..\%SOURCE_FOLDER%
 cmake --build .
-
+pause
 super_mario.exe
 pause

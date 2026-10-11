@@ -1,5 +1,7 @@
 #include "third_level.hpp"
 
+#include "fourth_level.hpp"
+
 using biv::ThirdLevel;
 
 ThirdLevel::ThirdLevel(UIFactory* ui_factory) : GameLevel(ui_factory) {
@@ -7,11 +9,11 @@ ThirdLevel::ThirdLevel(UIFactory* ui_factory) : GameLevel(ui_factory) {
 }
 
 biv::GameLevel* ThirdLevel::get_next() {
+	if (!next) {
+		clear_data();
+		next = new biv::FourthLevel(ui_factory);
+	}
 	return next;
-}
-
-bool ThirdLevel::is_final() const noexcept {
-	return true;
 }
 
 void ThirdLevel::init_data() {
