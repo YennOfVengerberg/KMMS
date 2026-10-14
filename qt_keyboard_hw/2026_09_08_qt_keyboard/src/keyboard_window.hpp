@@ -13,6 +13,7 @@ namespace biv {
 		private:
 			QLineEdit* display;
 			KeyBoard* keyboard;
+			bool caps_lock_enabled = false;
 
 		public:
 			KeyBoardWindow(QWidget* parent = nullptr);
@@ -22,5 +23,9 @@ namespace biv {
 
 		public slots:
 			void show_keyboard_window();
+
+		private slots:
+			void handle_keyboard_click(const QString& text);
+			void append_character(const QString& text);
 	};
 }

@@ -17,11 +17,13 @@ KeyBoard::KeyBoard(const int width, QWidget* parent)
 	KeyBoardButton* backspace_btn = new KeyBoardButton("Удалить");
 	backspace_btn->setMinimumSize(2 * button_width, button_width);
 	keys_layout->addWidget(backspace_btn, 0, 26, 2, 3);
+	connect_button(backspace_btn);
 
 	// 2-я линия
 	KeyBoardButton* tab_btn = new KeyBoardButton("Tab");
 	tab_btn->setMinimumSize(2 * button_width, button_width);
 	keys_layout->addWidget(tab_btn, 2, 0, 2, 3);
+	connect_button(tab_btn);
 	
 	create_buttons(keyboard_data->get_line2(), keys_layout, 2, 3);
 	
@@ -29,28 +31,33 @@ KeyBoard::KeyBoard(const int width, QWidget* parent)
 	KeyBoardButton* caps_btn = new KeyBoardButton("Caps");
 	caps_btn->setMinimumSize(2 * button_width, button_width);
 	keys_layout->addWidget(caps_btn, 4, 0, 2, 4);
+	connect_button(caps_btn);
 	
 	create_buttons(keyboard_data->get_line3(), keys_layout, 4, 4);
 	
 	KeyBoardButton* enter_btn = new KeyBoardButton("Enter");
 	enter_btn->setMinimumSize(2 * button_width, button_width);
 	keys_layout->addWidget(enter_btn, 4, 26, 2, 3);
+	connect_button(enter_btn);
 	
 	// 4-я линия
 	KeyBoardButton* left_shift_btn = new KeyBoardButton("Shift");
 	left_shift_btn->setMinimumSize(2 * button_width, button_width);
 	keys_layout->addWidget(left_shift_btn, 6, 0, 2, 5);
+	connect_button(left_shift_btn);
 	
 	create_buttons(keyboard_data->get_line4(), keys_layout, 6, 5);
 	
 	KeyBoardButton* right_shift_btn = new KeyBoardButton("Shift");
 	right_shift_btn->setMinimumSize(2 * button_width, button_width);
 	keys_layout->addWidget(right_shift_btn, 6, 25, 2, 4);
+	connect_button(right_shift_btn);
 
 	// 5-я линия
 	KeyBoardButton* space = new KeyBoardButton();
 	space->setMinimumSize(8 * button_width, button_width);
 	keys_layout->addWidget(space, 8, 7, 2, 16);
+	connect_button(space);
 }
 
 void KeyBoard::animate_button(const int code) {
@@ -81,5 +88,12 @@ void KeyBoard::create_buttons(
 		layout->addWidget(btn, line, i * 2 + start_position, 2, 2);
 		
 		buttons[data[i].code] = btn;
+		connect_button(btn);
 	}
+}
+
+void KeyBoard::connect_button(KeyBoardButton* button) {
+	connect(button, &QPushButton::clicked, this, [this, button]() {
+		emit key_clicked(button->text());
+	});
 }

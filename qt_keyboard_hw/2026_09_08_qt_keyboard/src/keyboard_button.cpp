@@ -9,4 +9,5 @@ KeyBoardButton::KeyBoardButton(const QString& text, QWidget* parent)
 	setFont(QFont("Roboto", 20));
 	setText(text);
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	setFocusPolicy(Qt::NoFocus);
 }
