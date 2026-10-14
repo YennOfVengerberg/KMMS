@@ -42,3 +42,9 @@ void KeyBoardWindow::keyPressEvent(QKeyEvent* event) {
 		keyboard->animate_button(key);
 	}
 }
+
+void KeyBoardWindow::show_keyboard_window() {
+	show();
+	raise();
+	activateWindow();
+}

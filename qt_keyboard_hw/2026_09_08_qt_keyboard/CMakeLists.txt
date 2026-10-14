@@ -16,10 +16,12 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         src/main.cpp
+		src/app_controller.cpp
 		src/keyboard.cpp
 		src/keyboard_button.cpp
 		src/keyboard_data.cpp
 		src/keyboard_window.cpp
+		src/welcome_screen.cpp
 )
 
 qt_add_executable(${PROJECT_NAME}

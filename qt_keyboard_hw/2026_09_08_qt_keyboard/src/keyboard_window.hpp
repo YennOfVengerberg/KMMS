@@ -19,5 +19,8 @@ namespace biv {
 			
 		protected:
 			void keyPressEvent(QKeyEvent* event) override;
+
+		public slots:
+			void show_keyboard_window();
 	};
 }
