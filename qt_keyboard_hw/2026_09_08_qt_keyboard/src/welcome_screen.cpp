@@ -4,10 +4,10 @@
 #include <QVBoxLayout>
 
 biv::WelcomeScreen::WelcomeScreen(QWidget* parent) : QWidget{parent} {
-    setWindowTitle("Добро пожаловать в Грустную Клавиатуру");
+    setWindowTitle("Грустная клавиатура?..");
     resize(500, 300);
 
-    auto* keyboard_button = new QPushButton("Открыть клавиатуру", this);
+    auto* keyboard_button = new QPushButton("Начать веселье", this);
     auto* layout = new QVBoxLayout(this);
     layout->addWidget(keyboard_button);
 
