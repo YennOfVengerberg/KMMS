@@ -16,5 +16,6 @@ cmake --build .
 
 if not exist %IMG_FOLDER% mkdir %IMG_FOLDER%
 copy ..\%IMG_FOLDER%\grustnii-smail.png %IMG_FOLDER%\
+copy ..\%IMG_FOLDER%\happy_pic.png %IMG_FOLDER%\
 
 keyboard.exe

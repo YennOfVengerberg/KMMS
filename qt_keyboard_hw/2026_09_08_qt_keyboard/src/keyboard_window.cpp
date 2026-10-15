@@ -12,9 +12,9 @@ KeyBoardWindow::KeyBoardWindow(QWidget* parent) : QWidget(parent) {
 	resize(keyboard_width, 710);
     setWindowTitle("Весёлая клавиатура!");
 	
-	QPixmap pixmap("img/grustnii-smail.png");
+	QPixmap pixmap("img/happy_pic.png");
 	QLabel* image = new QLabel(this);
-	image->setFixedSize(200, 200);
+	image->setFixedSize(230, 230);
 	image->setPixmap(pixmap);
 	image->setScaledContents(true);
 	
@@ -26,7 +26,7 @@ KeyBoardWindow::KeyBoardWindow(QWidget* parent) : QWidget(parent) {
 	display->setFont(QFont("Roboto", 40));
     display->setReadOnly(true);
 	display->setFocusPolicy(Qt::NoFocus);
-	display->setText("Помоги мне заработать лучше...");
+	display->setText("Нажмите Enter, чтобы очистить строку");
 
 	keyboard = new KeyBoard(keyboard_width);
 	keyboard->setFocusPolicy(Qt::NoFocus);
@@ -56,6 +56,10 @@ void KeyBoardWindow::keyPressEvent(QKeyEvent* event) {
 		return;
 	case Qt::Key_CapsLock:
 		caps_lock_enabled = !caps_lock_enabled;
+		return;
+	case Qt::Key_Return:
+	case Qt::Key_Enter:
+		display->clear();
 		return;
 	default:
 		break;
@@ -90,7 +94,12 @@ void KeyBoardWindow::handle_keyboard_click(const QString& text) {
 		return;
 	}
 
-	if (text == "Tab" || text == "Enter" || text == "Shift") {
+	if (text == "Enter") {
+		display->clear();
+		return;
+	}
+
+	if (text == "Tab" || text == "Shift") {
 		return;
 	}
 
