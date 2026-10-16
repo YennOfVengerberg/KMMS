@@ -5,18 +5,45 @@ using biv::ConsoleUIFactory;
 ConsoleUIFactory::ConsoleUIFactory(Game* game) : UIFactory(game) {}
 
 void ConsoleUIFactory::clear_data() {
-	game->remove_objs();
-	game_map->remove_objs();
-	delete mario;
-	mario = nullptr;
-	boxes.clear();
-	full_boxes.clear();
-	ships.clear();
-	moving_platforms.clear();
-	enemies.clear();
-	flying_enemies.clear();
-	jumping_enemies.clear();
-	moneys.clear();
+    game->remove_objs();
+    game_map->remove_objs();
+
+    delete mario;
+    mario = nullptr;
+
+    for (ConsoleBox* obj : boxes) {
+        delete obj;
+    }
+    for (ConsoleFullBox* obj : full_boxes) {
+        delete obj;
+    }
+    for (ConsoleShip* obj : ships) {
+        delete obj;
+    }
+    for (ConsoleMovingPlatform* obj : moving_platforms) {
+        delete obj;
+    }
+    for (ConsoleEnemy* obj : enemies) {
+        delete obj;
+    }
+    for (ConsoleFlyingEnemy* obj : flying_enemies) {
+        delete obj;
+    }
+    for (ConsoleJumpingEnemy* obj : jumping_enemies) {
+        delete obj;
+    }
+    for (ConsoleMoney* obj : moneys) {
+        delete obj;
+    }
+
+    boxes.clear();
+    full_boxes.clear();
+    ships.clear();
+    moving_platforms.clear();
+    enemies.clear();
+    flying_enemies.clear();
+    jumping_enemies.clear();
+    moneys.clear();
 }
 
 void ConsoleUIFactory::create_box(
@@ -46,8 +73,7 @@ void ConsoleUIFactory::create_flying_enemy(
 	ConsoleFlyingEnemy* enemy = new ConsoleFlyingEnemy(top_left, width, height);
 	flying_enemies.push_back(enemy);
 	game->add_map_movable(enemy);
-	game->add_movable(enemy);
-	game->add_collisionable(enemy);
+	game->add_moving_collisionable(enemy);
 	game_map->add_obj(enemy);
 }
 
@@ -68,8 +94,7 @@ void ConsoleUIFactory::create_jumping_enemy(
 	ConsoleJumpingEnemy* enemy = new ConsoleJumpingEnemy(top_left, width, height);
 	jumping_enemies.push_back(enemy);
 	game->add_map_movable(enemy);
-	game->add_movable(enemy);
-	game->add_collisionable(enemy);
+	game->add_moving_collisionable(enemy);
 	game_map->add_obj(enemy);
 }
 

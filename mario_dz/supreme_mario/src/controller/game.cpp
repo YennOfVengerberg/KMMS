@@ -33,6 +33,9 @@ void Game::add_static_obj(Rect* obj) {
 void Game::check_horizontally_static_collisions() noexcept {
 	auto process_collisions = [this](auto& objects) {
 		for (auto* obj: objects) {
+			if (!obj->is_active()) {
+				continue;
+			}
 			for (Rect* static_obj: static_objs) {
 				if (obj->has_collision(static_obj)) {
 					obj->process_horizontal_static_collision(static_obj);
@@ -49,14 +52,13 @@ void Game::check_mario_collision() {
 	auto process_collisions = [this](auto& objects) {
 		for (int i = 0; i < objects.size(); i++) {
 			auto* obj = objects[i];
+			if (!obj->is_active()) {
+				continue;
+			}
 			if (obj->has_collision(mario)) {
 				obj->process_mario_collision(mario);
 				if (!mario->is_active()) {
 					return;
-				} else if (!obj->is_active()) {
-					objects[i] = objects.back();
-					objects.pop_back();
-					i--;
 				}
 			}
 		}
@@ -83,6 +85,9 @@ void Game::check_vertically_static_collisions() noexcept {
 	
 	auto process_collisions = [this](auto& objects) {
 		for (auto* obj: objects) {
+			if (!obj->is_active()) {
+				continue;
+			}
 			for (Rect* static_obj: static_objs) {
 				if (obj->has_collision(static_obj)) {
 					obj->process_vertical_static_collision(static_obj);
