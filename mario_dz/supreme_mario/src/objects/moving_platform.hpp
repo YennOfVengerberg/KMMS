@@ -1,7 +1,6 @@
 #pragma once
 
 #include "moving_collisionable.hpp"
-#include "mario.hpp"
 #include "rect_map_movable_adapter.hpp"
 
 namespace biv {
@@ -12,7 +11,7 @@ namespace biv {
 			float left_limit;
 			float right_limit;
 			float direction = 1.0f;
-			Mario* rider = nullptr;
+			Collisionable* rider = nullptr;
 
 		public:
 			MovingPlatform(

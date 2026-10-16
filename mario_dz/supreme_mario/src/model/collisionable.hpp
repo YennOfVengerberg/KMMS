@@ -4,6 +4,8 @@
 #include "speed.hpp"
 
 namespace biv {
+	class Movable;
+
 	class Collisionable {
 		protected:
 			bool is_active_ = true;
@@ -12,6 +14,7 @@ namespace biv {
 			bool has_collision(Rect*) const noexcept;
 			bool is_active() const noexcept;
 			void kill() noexcept;
+			virtual Movable* get_movable() noexcept;
 
 			virtual Rect get_rect() const noexcept = 0;
 			virtual Speed get_speed() const noexcept = 0;

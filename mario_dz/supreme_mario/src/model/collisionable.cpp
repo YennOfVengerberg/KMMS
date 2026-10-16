@@ -2,6 +2,10 @@
 
 using biv::Collisionable;
 
+biv::Movable* Collisionable::get_movable() noexcept {
+	return nullptr;
+}
+
 bool Collisionable::has_collision(Rect* obj) const noexcept {
 	Rect myself = get_rect();
 	return (

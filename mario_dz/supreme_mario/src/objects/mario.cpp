@@ -15,6 +15,10 @@ biv::Speed Mario::get_speed() const noexcept {
 	return {vspeed, hspeed};
 }
 
+biv::Movable* Mario::get_movable() noexcept {
+	return this;
+}
+
 void Mario::move_map_left() noexcept {
 	move_horizontal_offset(biv::MapMovable::MAP_STEP);
 }

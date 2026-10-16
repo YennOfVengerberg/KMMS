@@ -8,6 +8,8 @@ namespace biv {
 		private:
 
 		public:
-			
+			Movable* get_movable() noexcept override {
+				return this;
+			}
 	};
 }

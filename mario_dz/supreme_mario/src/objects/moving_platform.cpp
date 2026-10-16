@@ -36,7 +36,10 @@ void MovingPlatform::move_horizontally() noexcept {
 	if (rider == nullptr) {
 		return;
 	}
-	if (!rider->is_active() || rider->get_speed().v < 0) {
+	Movable* movable_rider = rider->get_movable();
+	if (movable_rider == nullptr ||
+		!rider->is_active() ||
+		rider->get_speed().v < 0) {
 		rider = nullptr;
 		return;
 	}
@@ -53,7 +56,7 @@ void MovingPlatform::move_horizontally() noexcept {
 		return;
 	}
 
-	rider->move_horizontal_offset(hspeed);
+	movable_rider->move_horizontal_offset(hspeed);
 }
 
 void MovingPlatform::move_vertically() noexcept {}
@@ -75,23 +78,23 @@ void MovingPlatform::move_map_right() noexcept {
 void MovingPlatform::process_horizontal_static_collision(Rect*) noexcept {}
 
 void MovingPlatform::process_mario_collision(Collisionable* obj) noexcept {
-	Mario* mario = dynamic_cast<Mario*>(obj);
-	if (mario == nullptr) {
+	if (obj->get_movable() == nullptr) {
 		return;
 	}
-	if (mario->get_speed().v < 0) {
-		if (rider == mario) {
+	if (obj->get_speed().v < 0) {
+		if (rider == obj) {
 			rider = nullptr;
 		}
 		return;
 	}
 
-	const Rect mario_rect = mario->get_rect();
-	const float mario_bottom = mario_rect.get_y() + mario_rect.get_height();
+	const Rect rider_rect = obj->get_rect();
+	const float rider_bottom = rider_rect.get_y() + rider_rect.get_height();
 	const bool near_top =
-		mario_bottom >= top_left.y - 1.0f && mario_bottom <= top_left.y + 1.0f;
+		rider_bottom >= top_left.y - 1.0f &&
+		rider_bottom <= top_left.y + 1.0f;
 	if (near_top) {
-		rider = mario;
+		rider = obj;
 	}
 }
 
