@@ -1,5 +1,7 @@
 #include "keyboard_window.hpp"
 
+#include <iostream>
+
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPixmap>
@@ -33,7 +35,7 @@ KeyBoardWindow::KeyBoardWindow(QWidget* parent) : QWidget(parent) {
 	connect(keyboard,
 			&KeyBoard::key_clicked,
 			this,
-			&KeyBoardWindow::handle_keyboard_click);
+			&KeyBoardWindow::handle_keyboard_click); // нажатие кнопки в окне
 
     QVBoxLayout* main_layout = new QVBoxLayout(this);
 	main_layout->addLayout(smail_layout);
@@ -42,10 +44,12 @@ KeyBoardWindow::KeyBoardWindow(QWidget* parent) : QWidget(parent) {
 	setFocusPolicy(Qt::StrongFocus);
 }
 
-void KeyBoardWindow::keyPressEvent(QKeyEvent* event) {
+void KeyBoardWindow::keyPressEvent(QKeyEvent* event) { // отлов кнопки ирл клавиатуры
 	if (event->isAutoRepeat()) {
 		return;
 	}
+
+	std::cout << "Reak keybaord clicked" << std::endl;
 
 	switch (event->key()) {
 	case Qt::Key_Backspace:
@@ -78,7 +82,7 @@ void KeyBoardWindow::show_keyboard_window() {
 	setFocus();
 }
 
-void KeyBoardWindow::handle_keyboard_click(const QString& text) {
+void KeyBoardWindow::handle_keyboard_click(const QString& text) { // обработка экранной
 	if (text == "Удалить") {
 		display->backspace();
 		return;

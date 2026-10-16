@@ -1,5 +1,5 @@
 #include "keyboard.hpp"
-
+#include <iostream>
 using biv::KeyBoard;
 
 KeyBoard::KeyBoard(const int width, QWidget* parent) 
@@ -92,8 +92,9 @@ void KeyBoard::create_buttons(
 	}
 }
 
-void KeyBoard::connect_button(KeyBoardButton* button) {
+void KeyBoard::connect_button(KeyBoardButton* button) { // нажатие кнопки в окне
 	connect(button, &QPushButton::clicked, this, [this, button]() {
+		std::cout << "Window Key pressed " << std::endl;
 		emit key_clicked(button->text());
 	});
 }
