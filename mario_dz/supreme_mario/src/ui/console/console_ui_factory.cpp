@@ -32,6 +32,9 @@ void ConsoleUIFactory::clear_data() {
     for (ConsoleJumpingEnemy* obj : jumping_enemies) {
         delete obj;
     }
+    for (ConsoleMine* obj : mines) {
+        delete obj;
+    }
     for (ConsoleMoney* obj : moneys) {
         delete obj;
     }
@@ -43,6 +46,7 @@ void ConsoleUIFactory::clear_data() {
     enemies.clear();
     flying_enemies.clear();
     jumping_enemies.clear();
+    mines.clear();
     moneys.clear();
 }
 
@@ -98,6 +102,14 @@ void ConsoleUIFactory::create_jumping_enemy(
 	game_map->add_obj(enemy);
 }
 
+void ConsoleUIFactory::create_mine(const Coord& top_left) {
+	ConsoleMine* mine = new ConsoleMine(top_left);
+	mines.push_back(mine);
+	game->add_map_movable(mine);
+	game->add_collisionable(mine);
+	game_map->add_obj(mine);
+}
+
 void ConsoleUIFactory::create_mario(
 	const Coord& top_left, const int width, const int height
 ) {
@@ -114,6 +126,7 @@ void ConsoleUIFactory::create_mario(
 	game->add_mario(mario);
 	game_map->add_obj(mario);
 }
+
 
 void ConsoleUIFactory::create_money(
 	const Coord& top_left, const int width, const int height

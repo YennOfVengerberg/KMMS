@@ -1,8 +1,3 @@
-/**
-	- Какому паттерну проектирования соответствует UIFactory?
-	- В каких случаях используется этот паттернн проектирования?
-*/
-
 #pragma once
 
 #include "game.hpp"
@@ -31,6 +26,7 @@ namespace biv {
 				const Coord& top_left, const int width, const int height) = 0;
 			virtual void create_mario(
 				const Coord& top_left, const int width, const int height) = 0;
+			virtual void create_mine(const Coord& top_left) = 0;
 			virtual void create_money(
 				const Coord& top_left, const int width, const int height) = 0;
 			virtual void create_moving_platform(
