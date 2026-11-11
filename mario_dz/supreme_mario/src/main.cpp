@@ -18,6 +18,18 @@
 	- Какими элементами языка С++ реализуется этот принцип?
 	- Приведите примеры кода, отображающие этот прицип.
 */
+#ifdef QT6_GUI
+#include <chrono>
+#include <thread>
+#include <QApplication>
+#include "first_level.hpp"
+#include "game.hpp"
+#include "game_level.hpp"
+#include "mario.hpp"
+#include "qt6_game_map.hpp"
+#include "qt6_ui_factory.hpp"
+#include "qt6_keyboard.hpp"
+#else
 #include <thread>
 
 #include "console_ui_factory.hpp"
@@ -38,6 +50,83 @@
 	#include "linux_keyboard.hpp"
 	#include "ncurses.h"
 #endif
+#endif
+
+#ifdef QT6_GUI
+int main(int argc, char* argv[]) {
+	QApplication application(argc, argv);
+	using namespace std::chrono_literals;
+
+	const int map_height = 30;
+	const int map_width = 120;
+	biv::Game game;
+	biv::Qt6UIFactory ui_factory(&game);
+	auto* game_map = static_cast<biv::Qt6GameMap*>(
+		ui_factory.get_game_map(map_height, map_width)
+	);
+	biv::Qt6KeyBoard keyboard(game_map);
+	biv::GameLevel* game_level = new biv::FirstLevel(&ui_factory);
+	biv::Mario* mario = ui_factory.get_mario();
+	game_map->show();
+
+	do {
+		application.processEvents();
+		switch (keyboard.get_user_input()) {
+			case biv::UserInput::DEBUG_SKIP_LEVEL:
+				if (!game_level->is_final()) {
+					game_level = game_level->get_next();
+					mario = ui_factory.get_mario();
+					game.start_level();
+				}
+				break;
+			case biv::UserInput::MAP_LEFT:
+				mario->move_map_left();
+				if (!game.check_static_collisions(mario)) game.move_map_left();
+				mario->move_map_right();
+				break;
+			case biv::UserInput::MAP_RIGHT:
+				mario->move_map_right();
+				if (!game.check_static_collisions(mario)) game.move_map_right();
+				mario->move_map_left();
+				break;
+			case biv::UserInput::MARIO_JUMP:
+				mario->jump();
+				break;
+			case biv::UserInput::EXIT:
+				game.finish();
+				break;
+			case biv::UserInput::NO_INPUT:
+				break;
+		}
+
+		game.move_objs_horizontally();
+		game.check_horizontally_static_collisions();
+		game.move_objs_vertically();
+		game.check_mario_collision();
+		game.check_vertically_static_collisions();
+
+		if (game_map->is_below_map(mario->get_top()) || !mario->is_active()) {
+			game_level->restart();
+			mario = ui_factory.get_mario();
+		}
+		if (game.is_level_end()) {
+			if (!game_level->is_final()) {
+				game_level = game_level->get_next();
+				mario = ui_factory.get_mario();
+				game.start_level();
+			} else {
+				game.finish();
+			}
+		}
+		game_map->refresh();
+		application.processEvents();
+		std::this_thread::sleep_for(16ms);
+	} while (!game.is_finished() && application.applicationState() != Qt::ApplicationInactive);
+
+	delete game_level;
+	return 0;
+}
+#else
 
 int main() {
 	// 1. Установка параметров игры
@@ -149,3 +238,4 @@ int main() {
 	
 	// 6. Завершение
 }
+#endif
