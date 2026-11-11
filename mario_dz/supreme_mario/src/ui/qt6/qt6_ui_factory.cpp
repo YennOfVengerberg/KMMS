@@ -34,8 +34,10 @@ namespace biv {
 				: FullBox(pos, width, height, factory),
 				  Qt6UIObjectRectAdapter(pos, width, height) {}
 		static constexpr const char* key = "full_box";
-		const char* get_sprite_key() const noexcept override { return key; }
-		bool is_active() const noexcept override { return FullBox::is_active(); }
+		const char* get_sprite_key() const noexcept override {
+			return FullBox::is_active() ? key : "box";
+		}
+		bool is_active() const noexcept override { return true; }
 	};
 	class Qt6Enemy : public Qt6ModelObject<Enemy> {
 		public: using Qt6ModelObject::Qt6ModelObject;

@@ -75,11 +75,21 @@ QPixmap Qt6GameMap::sprite(const char* key) {
 void Qt6GameMap::paintEvent(QPaintEvent*) {
 	QPainter painter(this);
 	painter.fillRect(rect(), QColor(92, 148, 252));
-	const double scale_x = static_cast<double>(QWidget::width()) / GameMap::width;
-	const double scale_y = static_cast<double>(QWidget::height()) / GameMap::height;
+	const double scale = std::min(
+		static_cast<double>(QWidget::width()) / GameMap::width,
+		static_cast<double>(QWidget::height()) / GameMap::height
+	);
+	const double map_width = GameMap::width * scale;
+	const double map_height = GameMap::height * scale;
+	const double offset_x = (QWidget::width() - map_width) / 2.0;
+	const double offset_y = (QWidget::height() - map_height) / 2.0;
 	painter.fillRect(
-		0, static_cast<int>((GameMap::height - 3) * scale_y),
-		QWidget::width(), static_cast<int>(3 * scale_y),
+		QRectF(
+			offset_x,
+			offset_y + (GameMap::height - 3) * scale,
+			map_width,
+			3 * scale
+		),
 		QColor(40, 100, 210)
 	);
 
@@ -88,14 +98,43 @@ void Qt6GameMap::paintEvent(QPaintEvent*) {
 			continue;
 		}
 		const QRect target(
-			static_cast<int>(obj->get_left() * scale_x),
-			static_cast<int>(obj->get_top() * scale_y),
-			static_cast<int>((obj->get_right() - obj->get_left()) * scale_x),
-			static_cast<int>((obj->get_bottom() - obj->get_top()) * scale_y)
+			static_cast<int>(offset_x + obj->get_left() * scale),
+			static_cast<int>(offset_y + obj->get_top() * scale),
+			static_cast<int>((obj->get_right() - obj->get_left()) * scale),
+			static_cast<int>((obj->get_bottom() - obj->get_top()) * scale)
 		);
 		const QPixmap image = sprite(obj->get_sprite_key());
 		if (!image.isNull()) {
-			painter.drawPixmap(target.topLeft(), image);
+			const QString sprite_key = QString::fromLatin1(obj->get_sprite_key());
+			const bool is_tiled = sprite_key == QStringLiteral("ship")
+				|| sprite_key == QStringLiteral("box")
+				|| sprite_key == QStringLiteral("full_box")
+				|| sprite_key == QStringLiteral("moving_platform");
+			if (is_tiled) {
+				const QSize tile_size(
+					std::max(1, static_cast<int>(scale)),
+					std::max(1, static_cast<int>(scale))
+				);
+				const QPixmap tile = image.scaled(
+					tile_size,
+					Qt::IgnoreAspectRatio,
+					Qt::FastTransformation
+				);
+				painter.drawTiledPixmap(target, tile);
+			} else {
+				const QSize sprite_size(
+					std::max(1, static_cast<int>(image.width() * scale / 32.0)),
+					std::max(1, static_cast<int>(image.height() * scale / 32.0))
+				);
+				painter.drawPixmap(
+					target.topLeft(),
+					image.scaled(
+						sprite_size,
+						Qt::IgnoreAspectRatio,
+						Qt::FastTransformation
+					)
+				);
+			}
 		} else {
 			painter.fillRect(target, QColor(190, 60, 50));
 		}
