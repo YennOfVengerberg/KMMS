@@ -27,22 +27,19 @@
 #include "game_map.hpp"
 #include "keyboard.hpp"
 #include "mario.hpp"
+#include "runtime.hpp"
 #include "ui_factory.hpp"
 
 #ifdef QT6_GUI
-	#include <QApplication>
 	#include "qt6_game_map.hpp"
 	#include "qt6_keyboard.hpp"
 	#include "qt6_ui_factory.hpp"
 #else
 	#include "console_ui_factory.hpp"
-	#include "os_control_settings.hpp"
 
 	#ifdef WINDOWS_CONSOLE
-		#include "windows_control_settings.hpp"
 		#include "windows_keyboard.hpp"
 	#elif defined(LINUX_CONSOLE)
-		#include "linux_control_settings.hpp"
 		#include "linux_keyboard.hpp"
 		#include "ncurses.h"
 	#endif
@@ -53,33 +50,26 @@ int main(int argc, char* argv[]) {
 
 	const int map_height = 30;
 	const int map_width = 120;
-	auto frame_delay = std::chrono::milliseconds(0);
 	biv::Game game;
+	auto runtime = biv::create_runtime(argc, argv, map_height, map_width);
+	runtime->initialize();
 	biv::KeyBoard* keyboard = nullptr;
 	biv::UIFactory* ui_factory = nullptr;
 	biv::GameMap* game_map = nullptr;
 
 #ifdef QT6_GUI
-	QApplication application(argc, argv);
 	ui_factory = new biv::Qt6UIFactory(&game);
 	game_map = ui_factory->get_game_map(map_height, map_width);
 	keyboard = new biv::Qt6KeyBoard(
 		static_cast<biv::Qt6GameMap*>(game_map)
 	);
 #else
-	biv::OSControlSettings* control_settings = nullptr;
-
 	#ifdef WINDOWS_CONSOLE
-		control_settings = new biv::WindowsControlSettings();
 		keyboard = new biv::WindowsKeyBoard();
-		frame_delay = std::chrono::milliseconds(10);
 	#elif defined(LINUX_CONSOLE)
-		control_settings = new biv::LinuxControlSettings(map_height, map_width);
 		keyboard = new biv::LinuxKeyboard();
-		frame_delay = std::chrono::milliseconds(50);
 	#endif
 
-	control_settings->init();
 	keyboard->on();
 
 	ui_factory = new biv::ConsoleUIFactory(&game);
@@ -89,13 +79,11 @@ int main(int argc, char* argv[]) {
 	biv::GameLevel* game_level = new biv::FirstLevel(ui_factory);
 	biv::Mario* mario = ui_factory->get_mario();
 
-	game_map->show();
+	runtime->render(game_map);
 
 	biv::UserInput user_input;
 	do {
-#ifdef QT6_GUI
-		application.processEvents();
-#endif
+		runtime->process_events();
 
 		user_input = keyboard->get_user_input();
 		switch (user_input) {
@@ -104,9 +92,8 @@ int main(int argc, char* argv[]) {
 					game_level = game_level->get_next();
 					mario = ui_factory->get_mario();
 
-					std::this_thread::sleep_for(500ms);
-					keyboard->off();
-					keyboard->on();
+					runtime->delay(500ms);
+					runtime->reset_keyboard(keyboard);
 
 					game.start_level();
 				}
@@ -142,20 +129,18 @@ int main(int argc, char* argv[]) {
 		game.check_vertically_static_collisions();
 
 		if (game_map->is_below_map(mario->get_top()) || !mario->is_active()) {
-			keyboard->off();
-			keyboard->on();
+			runtime->reset_keyboard(keyboard);
 			game_level->restart();
 			mario = ui_factory->get_mario();
-			std::this_thread::sleep_for(1000ms);
+			runtime->delay(1000ms);
 		}
 
 		if (game.is_level_end()) {
 			if (!game_level->is_final()) {
 				game_level = game_level->get_next();
 				mario = ui_factory->get_mario();
-				std::this_thread::sleep_for(1000ms);
-				keyboard->off();
-				keyboard->on();
+				runtime->delay(1000ms);
+				runtime->reset_keyboard(keyboard);
 				game.start_level();
 			} else {
 				game.finish();
@@ -163,19 +148,10 @@ int main(int argc, char* argv[]) {
 		}
 
 		game_map->refresh();
-#ifdef QT6_GUI
-		application.processEvents();
-		std::this_thread::sleep_for(16ms);
-#else
-		control_settings->set_cursor_start_position();
-		game_map->show();
-		std::this_thread::sleep_for(frame_delay);
-#endif
-	} while (!game.is_finished()
-#ifdef QT6_GUI
-		&& application.applicationState() != Qt::ApplicationInactive
-#endif
-	);
+		runtime->process_events();
+		runtime->render(game_map);
+		runtime->delay(runtime->frame_delay());
+	} while (!game.is_finished() && runtime->should_continue());
 
 	delete game_level;
 	return 0;
