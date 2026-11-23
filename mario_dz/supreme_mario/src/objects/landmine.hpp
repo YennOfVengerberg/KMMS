@@ -12,6 +12,7 @@ namespace biv {
 		public:
 			Mine(const Coord& top_left);
 
+			void process_collision(Collisionable* object) noexcept;
 			void process_mario_collision(Collisionable* mario) noexcept override;
 	};
 }

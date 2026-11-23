@@ -12,6 +12,7 @@
 #include "movable.hpp"
 #include "rect.hpp"
 #include "moving_collisionable.hpp"
+#include "landmine.hpp"
 
 namespace biv {
 	class Game {
@@ -21,6 +22,7 @@ namespace biv {
 			std::vector<Collisionable*> collisionable_objs;
 			std::vector<Movable*> movable_objs;
 			std::vector<MovingCollisionable*> moving_collisionable_objs;
+			std::vector<Mine*> mines;
 			
 			Mario* mario = nullptr;
 			
@@ -36,11 +38,13 @@ namespace biv {
 			void add_movable(Movable*);
 			void add_moving_collisionable(MovingCollisionable*);
 			void add_static_obj(Rect*);
+			void add_mine(Mine*);
 			
 			void check_horizontally_static_collisions() noexcept;
 			void check_mario_collision();
 			bool check_static_collisions(Collisionable* obj) const noexcept;
 			void check_vertically_static_collisions() noexcept;
+			void check_landmines_collision() noexcept;
 			
 			void finish() noexcept;
 			
@@ -59,6 +63,7 @@ namespace biv {
 			void remove_moving_collisionable(MovingCollisionable*);
 			void remove_objs();
 			void remove_static_obj(Rect*);
+			void remove_mine(Mine*);
 			
 			void start_level() noexcept;
 

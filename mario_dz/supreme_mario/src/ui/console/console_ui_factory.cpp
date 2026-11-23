@@ -106,7 +106,7 @@ void ConsoleUIFactory::create_mine(const Coord& top_left) {
 	ConsoleMine* mine = new ConsoleMine(top_left);
 	mines.push_back(mine);
 	game->add_map_movable(mine);
-	game->add_collisionable(mine);
+	game->add_mine(mine);
 	game_map->add_obj(mine);
 }
 

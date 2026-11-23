@@ -147,7 +147,7 @@ namespace biv {
 	}
 	void Qt6UIFactory::create_mine(const Coord& p) {
 		auto* obj = create<Qt6Mine>(p);
-		game->add_map_movable(obj); game->add_collisionable(obj);
+		game->add_map_movable(obj); game->add_mine(obj);
 	}
 	void Qt6UIFactory::create_money(const Coord& p, int w, int h) {
 		auto* obj = create<Qt6Money>(p, w, h);

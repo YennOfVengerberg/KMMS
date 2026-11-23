@@ -127,6 +127,7 @@ int main(int argc, char* argv[]) {
 		game.move_objs_vertically();
 		game.check_mario_collision();
 		game.check_vertically_static_collisions();
+		game.check_landmines_collision();
 
 		if (game_map->is_below_map(mario->get_top()) || !mario->is_active()) {
 			runtime->reset_keyboard(keyboard);

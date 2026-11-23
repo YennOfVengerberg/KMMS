@@ -30,6 +30,10 @@ void Game::add_static_obj(Rect* obj) {
 	static_objs.push_back(obj);
 }
 
+void Game::add_mine(Mine* obj) {
+	mines.push_back(obj);
+}
+
 void Game::check_horizontally_static_collisions() noexcept {
 	auto process_collisions = [this](auto& objects) {
 		for (auto* obj: objects) {
@@ -92,6 +96,27 @@ void Game::check_vertically_static_collisions() noexcept {
 				if (obj->has_collision(static_obj)) {
 					obj->process_vertical_static_collision(static_obj);
 					break;
+				}
+			}
+		}
+	};
+	process_collisions(collisionable_objs);
+	process_collisions(moving_collisionable_objs);
+}
+
+void Game::check_landmines_collision() noexcept {
+	auto process_collisions = [this](auto& objects) {
+		for (Mine* mine: mines) {
+			if (!mine->is_active()) {
+				continue;
+			}
+			for (Collisionable* object: objects) {
+				if (!object->is_active()) {
+					continue;
+				}
+				Rect object_rect = object->get_rect();
+				if (mine->has_collision(&object_rect)) {
+					mine->process_collision(object); // object->process_mine_collision(mine);
 				}
 			}
 		}
@@ -168,11 +193,16 @@ void Game::remove_objs() {
 	movable_objs.clear();
 	moving_collisionable_objs.clear();
 	static_objs.clear();
+	mines.clear();
 	remove_mario();
 }
 
 void Game::remove_static_obj(Rect* obj) {
 	remove_obj(static_objs, obj);
+}
+
+void Game::remove_mine(Mine* obj) {
+	remove_obj(mines, obj);
 }
 
 void Game::start_level() noexcept {
